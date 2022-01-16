@@ -14,6 +14,7 @@
     <input type="password" placeholder="Repeat Password" name="user_password_repeat" id="user_password_repeat" required>
     <hr>
 
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p >{% endif %}
     <button type="submit" class="registerbtn">Register</button>
   </div>
 
