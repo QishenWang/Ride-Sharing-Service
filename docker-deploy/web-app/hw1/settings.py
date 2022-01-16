@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-l3qlo!)z#9-s3l6fi^(^_igcf9d%%@i8z_!cp4w@e4-*%%vi#3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vcm-24308.vm.duke.edu','127.0.0.1','vcm-24357.vm.duke.edu']
+ALLOWED_HOSTS = ['vcm-24308.vm.duke.edu','127.0.0.1','vcm-24357.vm.duke.edu','web']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'rides.apps.RidesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -73,13 +74,22 @@ WSGI_APPLICATION = 'hw1.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ridesdb',
+        'USER': 'dog',
+        'PASSWORD': 'dog',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -105,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EST'
 
 USE_I18N = True
 
