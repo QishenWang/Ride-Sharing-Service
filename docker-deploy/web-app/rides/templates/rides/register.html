@@ -1,8 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'mycss/login.css' %}">
+</head>
+<body>
+<div class="mb-3 login-class" id='login-title-id'>
+    {{'Register Page!'}}
+</div>
 {% load static %}
 <form action="{% url 'rides:register_request' %}" method="post">
   {% csrf_token %}
-  <div class="container">
-    <h1>Register</h1>
+  <div class="container mb-3">
     <p>Please fill in this form to create an account.</p>
     <hr>
 
@@ -19,7 +32,7 @@
     <button type="submit" class="registerbtn">Register</button>
   </div>
 
-  <div class="container signin">
+  <div class="container signin mb-3">
     <p>Already have an account? <a href="{% url 'rides:login' %}">Sign in</a>.</p>
   </div>
 </form>

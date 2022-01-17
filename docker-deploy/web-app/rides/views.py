@@ -12,16 +12,18 @@ def login(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        if username.strip() and password:  # 确保用户名和密码都不为空
+        print(username)
+        print(password)
+        if password:  # 确保用户名和密码都不为空
             # 用户名字符合法性验证
             # 密码长度验证
             # 更多的其它验证.....
             try:
-                user = models.User.objects.get(name=username)
+                user = User.objects.get(user_name=username)
             except:
-                return render(request, 'login/login.html')
-            if user.password == password:
-                return redirect('/index/')
+                return render(request, 'rides/login.html')
+            if user.user_password == password:
+                return HttpResponseRedirect(reverse('rides:index'))
     return render(request, 'rides/login.html')
 
 
