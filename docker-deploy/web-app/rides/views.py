@@ -16,12 +16,17 @@ def register(request):
 
 def register_request(request):
     try:
-        username_input = request.POST['user_name']
-        password_input = request.POST['user_password']
-        password_repeat_input = request.POST['user_password_repeat']
+        #print("hahahhahaha")
+        username_input = request.POST.get('user_name')
+        #print(username_input)
+        password_input = request.POST.get('user_password')
+        password_repeat_input = request.POST.get('user_password_repeat')
         if password_input != password_repeat_input:
             error_message = "Password does not match the password repeat!"
-            return render(request, 'rides/register.html', {error_message: error_message})
+            print(error_message)
+            return render(request, 'rides/register.html', {'error_message': error_message,})
+        # same_user = User.objects.filter(user_name__exact=username_input)
+        # if same_user
     except (KeyError):
         error_message = "Something went wrong..."
         return render(request, 'rides/register.html', {error_message: error_message})
