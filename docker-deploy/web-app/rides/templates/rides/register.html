@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'mycss/login.css' %}">
+  <meta charset="UTF-8">
+  <title>Register</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'mycss/login.css' %}">
 </head>
+
 <body>
-<div class="mb-3 login-class" id='login-title-id'>
+  <div class="mb-3 login-class" id='login-title-id'>
     {{'Register Page!'}}
-</div>
-{% load static %}
-<form action="{% url 'rides:register_request' %}" method="post">
-  {% csrf_token %}
-  <div class="container mb-3">
-    <p>Please fill in this form to create an account.</p>
-    <hr>
-
-    <label for="user_name"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="user_name" id="user_name" required>
-
-    <label for="user_password"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="user_password" id="user_password" required>
-
-    <label for="user_password_repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="user_password_repeat" id="user_password_repeat" required>
-    <hr>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p >{% endif %}
-    <button type="submit" class="registerbtn">Register</button>
   </div>
+  {% load static %}
+  <form action="{% url 'rides:register_request' %}" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <p>Please fill in this form to create an account.</p>
+      <hr>
 
-  <div class="container signin mb-3">
-    <p>Already have an account? <a href="{% url 'rides:login' %}">Sign in</a>.</p>
-  </div>
-</form>
+      <label for="user_name"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="user_name" id="user_name" required>
 
+      <label for="user_password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="user_password" id="user_password" required>
+
+      <label for="user_password_repeat"><b>Repeat Password</b></label>
+      <input type="password" placeholder="Repeat Password" name="user_password_repeat" id="user_password_repeat"
+        required>
+      <hr>
+      {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+      <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+
+    <div class="mb-3">
+      <p>Already have an account? <a href="{% url 'rides:login' %}">Sign in</a>.</p>
+    </div>
+  </form>
