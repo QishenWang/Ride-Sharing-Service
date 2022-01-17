@@ -1,7 +1,4 @@
-<!--<div>-->
-<!--    {{'Login Page!'}}-->
-<!--</div>-->
-<!--<a href="{%url 'rides:register'%}">{{ 'Register?' }}</a >-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +9,9 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 </head>
 <body>
+<div class="mb-3">
+    {{'Login Page!'}}
+</div>
     <form>
         {% csrf_token %}
         <div class="mb-3">
@@ -26,6 +26,9 @@
         <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
           <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <div class="mb-3">
+        <a href="{%url 'rides:register'%}">{{ 'Register?' }}</a >
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
