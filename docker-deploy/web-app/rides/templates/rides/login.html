@@ -22,7 +22,9 @@
     {% if error_message %}
     <div class="alert alert-warning">{{ error_message }}</div>
     {% endif %}
+
     {{ login_form }}
+
     <div class="mb-3">
       <a href="{%url 'rides:register'%}">{{ 'Register?' }}</a>
     </div>

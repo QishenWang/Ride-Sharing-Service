@@ -38,39 +38,30 @@ def login(request):
 
 
 def register(request):
-    return render(request, 'rides/register.html')
+    if request.method == 'POST':
+        register_form = forms.RegisterForm(request.POST)
+        error_message = 'Something went wrong...'
+        if register_form.is_valid():
+            username = register_form.cleaned_data.get('username')
+            password = register_form.cleaned_data.get('password')
+            password_repeat = register_form.cleaned_data.get('password_repeat')
 
+            # check for unique user name
+            same_user = User.objects.filter(user_name__exact=username)
+            #print(same_user)
+            if same_user.exists():
+                # query set is not empty, same as "if sam_user:"
+                error_message = "This user name is taken, try another one!"
+                return render(request, 'rides/register.html', locals())
+            if password != password_repeat:
+                error_message = "Password does not match the password repeat!"
+                return render(request, 'rides/register.html', locals())
+            # add the user if all correct
+            new_user = User(user_name=username, user_password=password)
+            new_user.save()
+            return redirect('/rides/login')
+        else:
+            return render(request, 'rides/register.html', locals())
 
-def register_request(request):
-    try:
-        print("hahahhahaha")
-        username_input = request.POST.get('user_name')
-        password_input = request.POST.get('user_password')
-        password_repeat_input = request.POST.get('user_password_repeat')
-
-        # check for unique user name
-        same_user = User.objects.filter(user_name__exact=username_input)
-        print(same_user)
-        if same_user.exists():
-            # query set is not empty, same as "if sam_user:"
-            error_message = "This user name is taken, try another one!"
-            return render(request, 'rides/register.html', {
-                'error_message': error_message,
-            })
-        if password_input != password_repeat_input:
-            error_message = "Password does not match the password repeat!"
-            return render(request, 'rides/register.html', {
-                'error_message': error_message,
-            })
-    except:
-        error_message = "Something went wrong..."
-        return render(request, 'rides/register.html',
-                      {error_message: error_message})
-    else:
-        new_user = User(user_name=username_input, user_password=password_input)
-        new_user.save()
-        return HttpResponseRedirect(reverse('rides:login'))
-    #return HttpResponse("You're requesting for registration.")
-
-
-# Create your views here.
+    register_form = forms.RegisterForm()
+    return render(request, 'rides/register.html', locals())
