@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'mycss/login.css' %}">
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Login</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'mycss/login.css' %}">
 </head>
+
 <body>
-<div class="mb-3 login-class" id='login-title-id'>
-    {{'Login Page!'}}
-</div>
-    <form action="{% url 'rides:login' %}" method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username">
-          <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password"name="password">
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" name="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <div class="mb-3">
-        <a href="{%url 'rides:register'%}">{{ 'Register?' }}</a >
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+  <div class="mb-3 login-class" id='login-title-id'>
+    <h>{{'Login Page!'}}</h>
+  </div>
+  {% load static %}
+  <form action="{% url 'rides:login' %}" method="post">
+    {% csrf_token %}
+    {% if error_message %}
+    <div class="alert alert-warning">{{ error_message }}</div>
+    {% endif %}
+    {{ login_form }}
+    <div class="mb-3">
+      <a href="{%url 'rides:register'%}">{{ 'Register?' }}</a>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 </body>
+
 </html>
