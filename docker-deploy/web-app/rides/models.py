@@ -2,13 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# # Create your models here.
-# class User(models.Model):
-#     user_name = models.CharField(max_length=50, unique=True)
-#     user_password = models.CharField(max_length=50)
-
-#     def __str__(self):
-#         return str(self.id) + '_' + self.user_name
+# Create your models here.
 
 
 VEHICLE_TYPE = [("SEDAN", "SEDAN"), ("SUV", "SUV")]

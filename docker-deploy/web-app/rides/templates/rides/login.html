@@ -5,14 +5,12 @@
     <h>{{'Login Page!'}}</h>
   </div>
   {% load static %}
-  <!-- <form action="{% url 'rides:login' %}" method="post"> -->
     <form method="POST">
     {% csrf_token %}
     {% if error_message %}
     <div class="alert alert-warning">{{ error_message }}</div>
     {% endif %}
 
-    <!-- {{ login_form.as_p }} -->
     {{ form.as_p }}
     <div class="mb-3">
       <a href="{%url 'rides:register'%}">{{ 'Register?' }}</a>
