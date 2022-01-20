@@ -8,11 +8,15 @@ from . import models
 
 
 def index(request):
+    if not request.session.get('is_login', None):
+        return redirect("/rides/login")
     return render(request,'rides/index.html',locals())
 
 
 def login(request):
     title = 'Login'
+    if request.session.get('is_login', None):  # 不允许重复登录
+        return redirect("/rides/")
     if request.method == 'POST':
         login_form = forms.LoginForm(request.POST)
         error_message = 'Something went wrong...'
@@ -26,7 +30,9 @@ def login(request):
                 return render(request, 'rides/login.html', locals())
 
             if user.user_password == password:
-                return redirect('/rides/')
+                request.session['is_login'] = True
+                request.session['username'] = username
+                return redirect("/rides/")
             else:
                 error_message = 'The password is incorrect！'
                 return render(request, 'rides/login.html', locals())
@@ -37,6 +43,12 @@ def login(request):
     return render(request, 'rides/login.html', locals())
     # Python内置了一个locals()函数，它返回当前所有的本地变量字典，我们可以偷懒的将这作为render函数的数据字典参数值，就不用费劲去构造一个形如{'message':message, 'login_form':login_form}的字典了
 
+def logout(request):
+    if not request.session.get('is_login', None):
+        # 如果本来就未登录，也就没有登出一说
+        return redirect("/rides/login")
+    request.session.flush()
+    return render(request, 'rides/logout.html', locals())
 
 def register(request):
     title = 'Register'
@@ -61,7 +73,7 @@ def register(request):
             # add the user if all correct
             new_user = User(user_name=username, user_password=password)
             new_user.save()
-            return redirect('/rides/login')
+            return redirect("/rides/login")
         else:
             return render(request, 'rides/register.html', locals())
 

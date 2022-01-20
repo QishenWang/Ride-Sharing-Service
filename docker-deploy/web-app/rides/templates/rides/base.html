@@ -33,8 +33,13 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              <a class="nav-item nav-link" href="{% url 'rides:login' %}">Login</a>
-              <a class="nav-item nav-link" href="{% url 'rides:register' %}">Register</a>
+            {% if request.session.is_login %}
+            <a class="nav-item nav-link" href="{% url 'rides:logout' %}">Logout</a>
+            {% else %}        
+            <a class="nav-item nav-link" href="{% url 'rides:login' %}">Login</a>
+            <a class="nav-item nav-link" href="{% url 'rides:register' %}">Register</a>
+          {% endif %}
+
             </div>
           </div>
         </div>
