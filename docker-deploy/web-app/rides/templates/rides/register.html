@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Register</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-  <link rel="stylesheet" href="{% static 'mycss/login.css' %}">
-</head>
-
-<body>
-  <div class="mb-3 login-class" id='login-title-id'>
-    <h>{{'Register Page!'}}</h>
+{% extends "rides/base.html" %}
+{% block content %}
+  <div class="mb-3 Login-Title" id='login-title-id'>
+    {{'Register Page!'}}
   </div>
   {% load static %}
   <form action="{% url 'rides:register' %}" method="post">
@@ -26,14 +14,15 @@
     </div>
 
     <hr>
-    {{ register_form }}
+    {{ register_form.as_p }}
     <hr>
 
     <div>
-      <button type="submit" class="btn btn-primary">Register</button>
+      <button type="submit" class="btn btn-primary Button">Register</button>
     </div>
 
     <div class="mb-3">
       <p>Already have an account? <a href="{% url 'rides:login' %}">Sign in</a>.</p>
     </div>
   </form>
+  {% endblock content%}

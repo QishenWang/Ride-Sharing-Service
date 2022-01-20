@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <!-- Required meta tags -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Login</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-  <link rel="stylesheet" href="{% static 'mycss/login.css' %}">
-</head>
-
-<body>
-  <div class="mb-3 login-class" id='login-title-id'>
+{% extends "rides/base.html" %}
+{% block content %}
+  <div class="mb-3 Login-Title" id='login-title-id'>
     <h>{{'Login Page!'}}</h>
   </div>
   {% load static %}
@@ -23,13 +10,13 @@
     <div class="alert alert-warning">{{ error_message }}</div>
     {% endif %}
 
-    {{ login_form }}
-
+    {{ login_form.as_p }}
+    
     <div class="mb-3">
       <a href="{%url 'rides:register'%}">{{ 'Register?' }}</a>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-</body>
+    
+    <button type="submit" class="btn btn-primary  Button">Submit</button>
 
-</html>
+  </form>
+{% endblock content%}

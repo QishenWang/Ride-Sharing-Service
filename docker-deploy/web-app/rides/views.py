@@ -8,10 +8,11 @@ from . import models
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the rides index.")
+    return render(request,'rides/index.html',locals())
 
 
 def login(request):
+    title = 'Login'
     if request.method == 'POST':
         login_form = forms.LoginForm(request.POST)
         error_message = 'Something went wrong...'
@@ -38,6 +39,7 @@ def login(request):
 
 
 def register(request):
+    title = 'Register'
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST)
         error_message = 'Something went wrong...'
@@ -52,7 +54,7 @@ def register(request):
             if same_user.exists():
                 # query set is not empty, same as "if sam_user:"
                 error_message = "This user name is taken, try another one!"
-                return render(request, 'rides/register.html', locals())
+                return render(request, 'rides/register.html',locals())
             if password != password_repeat:
                 error_message = "Password does not match the password repeat!"
                 return render(request, 'rides/register.html', locals())
