@@ -33,7 +33,7 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-            {% if request.session.is_login %}
+            {% if user.is_authenticated %}
             <a class="nav-item nav-link" href="{% url 'rides:logout' %}">Logout</a>
             {% else %}        
             <a class="nav-item nav-link" href="{% url 'rides:login' %}">Login</a>
