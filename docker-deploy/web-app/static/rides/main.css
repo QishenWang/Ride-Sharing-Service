@@ -19,12 +19,12 @@ body {
     transition-duration: 0.3s;
     background-color:#c164c6;
     color: #ffffff;
-    border: 2px solid plum;
+    border: 1px solid plum;
   }
   .Button:hover {
     color: #c164c6;
     background: #ffffff;
-    border: 2px solid plum;
+    border: 1px solid plum;
   }
 
   .bg-steel {
