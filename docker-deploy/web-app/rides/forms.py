@@ -1,18 +1,19 @@
 from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from .models import Driver, Ride
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(label="Username", max_length=50)
-    password = forms.CharField(label="Password",
-                               max_length=50,
-                               widget=forms.PasswordInput)
+class RegisterForm(UserCreationForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User  #The model this form interact with
+        fields = ['username', 'email', 'password1',
+                  'password2']  #The fields and order of fields that are shown
 
 
-class RegisterForm(forms.Form):
-    username = forms.CharField(label="Username", max_length=50)
-    password = forms.CharField(label="Password",
-                               max_length=50,
-                               widget=forms.PasswordInput)
-    password_repeat = forms.CharField(label="Repeat Password",
-                                      max_length=50,
-                                      widget=forms.PasswordInput)
+class DriverProfileForm(forms.Form):
+
+    class Meta:
+        model = Driver

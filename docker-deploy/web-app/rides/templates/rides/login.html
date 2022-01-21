@@ -1,5 +1,5 @@
 {% extends "rides/base.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="mb-3 Login-Title" id='login-title-id'>
   <h>{{'Login Page!'}}</h>
@@ -7,7 +7,7 @@
 {% load static %}
 <form method="POST">
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ form|crispy }}
   <div class="mb-3">
     <a href="{%url 'rides:register'%}">{{ 'Register?' }}</a>
   </div>

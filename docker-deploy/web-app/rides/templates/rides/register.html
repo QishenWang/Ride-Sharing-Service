@@ -1,28 +1,26 @@
 {% extends "rides/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-  <div class="mb-3 Login-Title" id='login-title-id'>
-    {{'Register Page!'}}
+<div class="mb-3 Login-Title" id='login-title-id'>
+  {{'Register Page!'}}
+</div>
+{% load static %}
+<form action="{% url 'rides:register' %}" method="post">
+  {% csrf_token %}
+  <div class="mb-3">
+    <p>Please fill in this form to create an account.</p>
   </div>
-  {% load static %}
-  <form action="{% url 'rides:register' %}" method="post">
-    {% csrf_token %}
-    {% if error_message %}
-    <div class="alert alert-warning">{{ error_message }}</div>
-    {% endif %}
-    <div class="mb-3">
-      <p>Please fill in this form to create an account.</p>
-    </div>
 
-    <hr>
-    {{ register_form.as_p }}
-    <hr>
+  <hr>
+  {{ register_form|crispy }}
+  <hr>
 
-    <div>
-      <button type="submit" class="btn btn-primary Button">Register</button>
-    </div>
+  <div>
+    <button type="submit" class="btn btn-primary Button">Register</button>
+  </div>
 
-    <div class="mb-3">
-      <p>Already have an account? <a href="{% url 'rides:login' %}">Sign in</a>.</p>
-    </div>
-  </form>
-  {% endblock content%}
+  <div class="mb-3">
+    <p>Already have an account? <a href="{% url 'rides:login' %}">Sign in</a>.</p>
+  </div>
+</form>
+{% endblock content%}
