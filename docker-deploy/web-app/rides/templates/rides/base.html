@@ -40,6 +40,9 @@
           <!-- Navbar Right Side -->
           <div class="navbar-nav">
             {% if user.is_authenticated %}
+            {% if not user.Driver.exists %}
+            <a class="nav-item nav-link" href="#">New Driver</a>
+            {% endif %}
             <a class="nav-item nav-link" href="{% url 'rides:logout' %}">Logout</a>
             {% else %}
             <a class="nav-item nav-link" href="{% url 'rides:login' %}">Login</a>
