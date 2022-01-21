@@ -16,9 +16,17 @@ body {
     font-size: 50px;
   }
   .Button{
-    background-color:plum;
+    transition-duration: 0.3s;
+    background-color:#c164c6;
     color: #ffffff;
+    border: 2px solid plum;
   }
+  .Button:hover {
+    color: #c164c6;
+    background: #ffffff;
+    border: 2px solid plum;
+  }
+
   .bg-steel {
     background-color: #c164c6;
   }
