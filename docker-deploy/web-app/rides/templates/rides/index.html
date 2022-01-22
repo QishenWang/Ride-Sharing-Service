@@ -5,11 +5,16 @@
     <article class="media content-section">
       <div class="media-body">
         <div class="article-metadata">
-          <a class="mr-2" href="#">{{ ride.driver }}</a>
-          <small class="text-muted">{{ ride.arrival_time|date:"F d, Y" }}</small>
+          <small class="text-muted">Arrival Time: {{ ride.arrival_time|date:"F d, Y" }}</small>  
         </div>
-        <h2><a class="article-title" href="#">{{ ride.vehicle_type }}</a></h2>
-        <p class="article-content">{{ ride.ride_destination }}</p>
+        {% if not ride.ride_driver %}
+        <h3><a class="mr-2">The order is not confirmed!</a></h3>
+        </p><a class="mr-2" href="#">Edit your ride</a></p>
+        {% else %}
+        <h3><a class="mr-2" href="#">Driver: {{ ride.ride_driver.username }}</a></h3>
+        {% endif %}
+        <a class="article-content">Vehicle Type: {{ ride.vehicle_type }}</a>
+        <p class="article-content">Destination: {{ ride.ride_destination }}</p>
       </div>
     </article>
 {% endfor %}

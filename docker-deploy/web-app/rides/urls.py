@@ -7,7 +7,7 @@ from .views import (
 )
 app_name = 'rides'
 urlpatterns = [
-    path('', RideListView.as_view(), name='index'),
+    path('', views.index, name='index'),
     path('register/', views.register, name='register'),
     path('login/',
          auth_views.LoginView.as_view(template_name='rides/login.html'),

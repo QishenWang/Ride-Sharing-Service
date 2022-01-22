@@ -28,8 +28,10 @@ class RideListView(ListView):
 def index(request):
     is_driver = Driver.objects.filter(user=request.user).exists()
     user_mode = True
-    my_rides = User.ride_owner.all()
-    print(my_rides)
+    my_rides = Ride.objects.filter(ride_owner=request.user)
+    for ride in my_rides:
+        print(ride.ride_owner.username)
+    print("123333")
     return render(request, 'rides/index.html', locals())
 
 
