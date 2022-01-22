@@ -1,4 +1,16 @@
 {% extends "rides/base.html" %}
 {% block content %}
     <h1>Hello, {{user.username}}!</h1>
+    {% for ride in my_rides %}
+    <article class="media content-section">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="#">{{ ride.driver }}</a>
+          <small class="text-muted">{{ ride.arrival_time|date:"F d, Y" }}</small>
+        </div>
+        <h2><a class="article-title" href="#">{{ ride.vehicle_type }}</a></h2>
+        <p class="article-content">{{ ride.ride_destination }}</p>
+      </div>
+    </article>
+{% endfor %}
 {% endblock content%}

@@ -9,11 +9,27 @@ from .models import Driver, Ride
 from . import forms
 from . import models
 
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
+
+class RideListView(ListView):
+    model = Ride
+    template_name = 'rides/index.html'  # <app>/<model>_<viewtype>.html
+    ordering = ['-arrival_time']
+    context_object_name = 'my_rides'
+   
 
 @login_required
 def index(request):
-    isDriver = Driver.objects.filter(user_id=request.user).exists()
+    is_driver = Driver.objects.filter(user=request.user).exists()
     user_mode = True
+    my_rides = User.ride_owner.all()
+    print(my_rides)
     return render(request, 'rides/index.html', locals())
 
 
@@ -34,10 +50,10 @@ def register(request):
 @login_required
 def newdriver(request):
     title = 'New Driver'
-    isDriver = Driver.objects.filter(user_id=request.user).exists()
+    is_driver = Driver.objects.filter(user=request.user).exists()
     user_mode = True
     if request.method == 'POST':
-        driver = Driver.objects.create(user_id=request.user)
+        driver = Driver.objects.create(user=request.user)
         form = forms.DriverProfileForm(request.POST, instance=driver)
         if form.is_valid():
             form.save()

@@ -41,7 +41,7 @@
           <div class="navbar-nav">
             {% if user.is_authenticated %}
 
-            {% if not isDriver %}
+            {% if not is_driver %}
             <a class="nav-item nav-link" href="{% url 'rides:newdriver' %}">New Driver</a>
             {% else %}
 

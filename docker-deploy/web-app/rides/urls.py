@@ -2,10 +2,12 @@ from django.urls import path
 
 from . import views
 from django.contrib.auth import views as auth_views
-
+from .views import (
+    RideListView
+)
 app_name = 'rides'
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', RideListView.as_view(), name='index'),
     path('register/', views.register, name='register'),
     path('login/',
          auth_views.LoginView.as_view(template_name='rides/login.html'),
