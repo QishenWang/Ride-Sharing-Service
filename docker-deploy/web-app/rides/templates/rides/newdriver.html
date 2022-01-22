@@ -1,0 +1,15 @@
+{% extends "rides/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="mb-3 Login-Title" id='login-title-id'>
+    <h>{{'New Driver Page!'}}</h>
+</div>
+{% load static %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <button type="submit" class="btn btn-primary Button">Submit</button>
+
+</form>
+{% endblock content%}

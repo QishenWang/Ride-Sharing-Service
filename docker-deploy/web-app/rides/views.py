@@ -12,6 +12,8 @@ from . import models
 
 @login_required
 def index(request):
+    isDriver = Driver.objects.filter(user_id=request.user).exists()
+    user_mode = True
     return render(request, 'rides/index.html', locals())
 
 
@@ -27,3 +29,23 @@ def register(request):
     else:
         register_form = forms.RegisterForm()
     return render(request, 'rides/register.html', locals())
+
+
+@login_required
+def newdriver(request):
+    title = 'New Driver'
+    isDriver = Driver.objects.filter(user_id=request.user).exists()
+    user_mode = True
+    if request.method == 'POST':
+        driver = Driver.objects.create(user_id=request.user)
+        form = forms.DriverProfileForm(request.POST, instance=driver)
+        if form.is_valid():
+            form.save()
+            username = request.user.username
+            messages.success(request,
+                             f'Driver profile created for {username} !')
+            return redirect("/rides")
+    else:
+        form = forms.DriverProfileForm()
+
+    return render(request, 'rides/newdriver.html', locals())

@@ -13,7 +13,11 @@ class RegisterForm(UserCreationForm):
                   'password2']  #The fields and order of fields that are shown
 
 
-class DriverProfileForm(forms.Form):
+class DriverProfileForm(forms.ModelForm):
 
     class Meta:
         model = Driver
+        fields = [
+            'vehicle_type', 'plate_number', 'max_passenger_number',
+            'special_vehicle_info'
+        ]
