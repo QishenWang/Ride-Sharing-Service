@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ValidationError
 from django.urls import reverse
+from django.db.models import CheckConstraint, Q, F
+from datetime import datetime, timezone
 
 # Create your models here.
-
 
 VEHICLE_TYPE = [("SEDAN", "SEDAN"), ("SUV", "SUV")]
 MAX_PASSENGER_TYPE = [(1, "1 Passenger"), (2, "2 Passengers"),
@@ -26,38 +28,35 @@ class Driver(models.Model):
 
 
 class Ride(models.Model):
+
     ride_owner = models.ForeignKey(User,
-                                      related_name='Owner',
-                                      on_delete=models.CASCADE)
+                                   related_name='Owner',
+                                   on_delete=models.CASCADE)
     ride_driver = models.ForeignKey(User,
-                                       related_name='Driver',
-                                       on_delete=models.SET_NULL,
-                                       null=True,
-                                       blank=True
-                                       )
+                                    related_name='Driver',
+                                    on_delete=models.SET_NULL,
+                                    null=True,
+                                    blank=True)
     ride_sharer1 = models.ForeignKey(User,
-                                        related_name='Sharer_1',
-                                        on_delete=models.SET_NULL,
-                                        null=True,
-                                        blank=True
-                                        )
+                                     related_name='Sharer_1',
+                                     on_delete=models.SET_NULL,
+                                     null=True,
+                                     blank=True)
     ride_sharer2 = models.ForeignKey(User,
-                                        related_name='Sharer_2',
-                                        on_delete=models.SET_NULL,
-                                        null=True,
-                                        blank=True
-                                        )
+                                     related_name='Sharer_2',
+                                     on_delete=models.SET_NULL,
+                                     null=True,
+                                     blank=True)
     ride_sharer3 = models.ForeignKey(User,
-                                        related_name='Sharer_3',
-                                        on_delete=models.SET_NULL,
-                                        null=True,
-                                        blank=True
-                                        )
+                                     related_name='Sharer_3',
+                                     on_delete=models.SET_NULL,
+                                     null=True,
+                                     blank=True)
     ride_sharer4 = models.ForeignKey(User,
-                                        related_name='Sharer_4',
-                                        on_delete=models.SET_NULL,
-                                        null=True,
-                                        blank=True)
+                                     related_name='Sharer_4',
+                                     on_delete=models.SET_NULL,
+                                     null=True,
+                                     blank=True)
     ride_destination = models.CharField(max_length=200)
     is_complete = models.BooleanField(default=False)
     is_sharable = models.BooleanField(default=False)
@@ -69,6 +68,13 @@ class Ride(models.Model):
     special_request = models.TextField(blank=True, default='')
 
     def __str__(self):
-        return str(self.id) + '_' + self.ride_owner.username + '_' + self.ride_destination
+        return str(
+            self.id
+        ) + '_' + self.ride_owner.username + '_' + self.ride_destination
+
     def get_absolute_url(self):
         return reverse('rides:index')
+
+    def clean(self):
+        if self.arrival_time.timestamp() <= datetime.now().timestamp():
+            raise ValidationError('Arrival time is earlier than current time.')
