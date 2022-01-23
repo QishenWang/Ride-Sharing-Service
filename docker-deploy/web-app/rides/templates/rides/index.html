@@ -5,11 +5,11 @@
     <article class="media content-section">
       <div class="media-body">
         <div class="article-metadata">
-          <small class="text-muted">Arrival Time: {{ ride.arrival_time|date:"F d, Y" }}</small>  
+          <small class="text-muted">Arrival Time: {{ ride.arrival_time|date:"F d, Y H:i" }}</small>  
         </div>
         {% if not ride.ride_driver %}
         <h3><a class="mr-2">The order is not confirmed!</a></h3>
-        </p><a class="mr-2" href="#">Edit your ride</a></p>
+        </p><a class="mr-2" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a></p>
         {% else %}
         <h3><a class="mr-2" href="#">Driver: {{ ride.ride_driver.username }}</a></h3>
         {% endif %}
