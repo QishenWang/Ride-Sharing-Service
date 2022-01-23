@@ -34,7 +34,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarToggle">
           <div class="navbar-nav mr-auto">
+            {% if not is_driver or user_mode%}
             <a class="nav-item nav-link" href="{% url 'rides:index' %}">Home</a>
+            <a class="nav-item nav-link" href="{% url 'rides:newride' %}">New Ride</a>
+            <a class="nav-item nav-link" href="#">Share Ride</a>
+            {% else %}
+            <a class="nav-item nav-link" href="{% url 'rides:driver' %}">Home</a>
+            <a class="nav-item nav-link" href="#">Drive Ride</a>
+            {% endif %}
 
           </div>
           <!-- Navbar Right Side -->
@@ -46,10 +53,9 @@
             {% else %}
 
             {% if user_mode %}
-            <a class="nav-item nav-link" href="{% url 'rides:newride' %}">New Post</a>
-            <a class="nav-item nav-link" href="#">Driver Mode</a>
+            <a class="nav-item nav-link" href="{% url 'rides:driver' %}">Driver Mode</a>
             {% else %}
-            <a class="nav-item nav-link" href="#">User Mode</a>
+            <a class="nav-item nav-link" href="{% url 'rides:index' %}">User Mode</a>
             {% endif %}
 
             {% endif %}

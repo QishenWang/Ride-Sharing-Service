@@ -2,11 +2,8 @@ from django.urls import path
 
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import (
-    RideListView,
-    RideCreateView,
-    RideUpdateView
-)
+from .views import (RideListView, RideCreateView, RideUpdateView)
+
 app_name = 'rides'
 urlpatterns = [
     path('', RideListView.as_view(), name='index'),
@@ -20,5 +17,5 @@ urlpatterns = [
     path('newdriver/', views.newdriver, name='newdriver'),
     path('newride/', RideCreateView.as_view(), name='newride'),
     path('<int:pk>/updateride/', RideUpdateView.as_view(), name='updateride'),
-    #path('driver/', views.driver, name='driver'),
+    path('driver/', views.driver, name='driver'),
 ]

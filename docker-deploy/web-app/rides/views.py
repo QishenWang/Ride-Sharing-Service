@@ -12,15 +12,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from datetime import datetime, timedelta, time
 
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView
-)
+from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
+                                  DeleteView)
 
-class RideListView(LoginRequiredMixin,ListView):
+
+class RideListView(LoginRequiredMixin, ListView):
     model = Ride
     template_name = 'rides/index.html'  # <app>/<model>_<viewtype>.html
 
@@ -28,29 +24,39 @@ class RideListView(LoginRequiredMixin,ListView):
         context = super(RideListView, self).get_context_data(**kwargs)
         today = datetime.now().date()
         today_start = datetime.combine(today, time())
-        context['my_rides'] = self.request.user.Owner.all().filter(arrival_time__gte=today_start).order_by('arrival_time')
+        context['my_rides'] = self.request.user.Owner.all().filter(
+            arrival_time__gte=today_start).order_by('arrival_time')
         context['user_mode'] = True
         context['is_driver'] = Driver.objects.filter(
             user=self.request.user).exists()
         return context
 
+
 class RideCreateView(LoginRequiredMixin, CreateView):
     model = Ride
-    fields = ['ride_destination', 'is_sharable','arrival_time','passenger_number','vehicle_type','special_request']
+    fields = [
+        'ride_destination', 'is_sharable', 'arrival_time', 'passenger_number',
+        'vehicle_type', 'special_request'
+    ]
 
     def form_valid(self, form):
         form.instance.ride_owner = self.request.user
         return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super(RideCreateView, self).get_context_data(**kwargs)
         context['user_mode'] = True
         context['is_driver'] = Driver.objects.filter(
             user=self.request.user).exists()
-        return context   
+        return context
+
 
 class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Ride
-    fields = ['ride_destination', 'is_sharable','arrival_time','passenger_number','vehicle_type','special_request']
+    fields = [
+        'ride_destination', 'is_sharable', 'arrival_time', 'passenger_number',
+        'vehicle_type', 'special_request'
+    ]
 
     def form_valid(self, form):
         form.instance.ride_owner = self.request.user
@@ -61,13 +67,14 @@ class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user == ride.ride_owner:
             return True
         return False
-    
+
     def get_context_data(self, **kwargs):
         context = super(RideUpdateView, self).get_context_data(**kwargs)
         context['user_mode'] = True
         context['is_driver'] = Driver.objects.filter(
             user=self.request.user).exists()
-        return context 
+        return context
+
 
 # @login_required
 # def index(request):
@@ -109,3 +116,10 @@ def newdriver(request):
         form = forms.DriverProfileForm()
 
     return render(request, 'rides/newdriver.html', locals())
+
+
+@login_required
+def driver(request):
+    is_driver = Driver.objects.filter(user=request.user).exists()
+    user_mode = False
+    return render(request, 'rides/driver.html', locals())
