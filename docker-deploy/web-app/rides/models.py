@@ -61,7 +61,7 @@ class Ride(models.Model):
     ride_destination = models.CharField(max_length=200)
     is_complete = models.BooleanField(default=False)
     is_sharable = models.BooleanField(default=False)
-    arrival_time = models.DateTimeField(help_text='Format: 2020-01-01 12:00')
+    arrival_time = models.DateTimeField(help_text='Format: 2022-02-14 12:00')
     passenger_number = models.IntegerField(default=1)
     vehicle_type = models.CharField(max_length=10,
                                     choices=VEHICLE_TYPE,
