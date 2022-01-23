@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .models import Driver, Ride
 from . import forms
 from . import models
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from django.views.generic import (
     ListView,
@@ -22,16 +23,20 @@ class RideListView(ListView):
     template_name = 'rides/index.html'  # <app>/<model>_<viewtype>.html
     ordering = ['-arrival_time']
     context_object_name = 'my_rides'
-   
+
+class RideCreateView(LoginRequiredMixin, CreateView):
+    model = Ride
+    fields = ['ride_destination', 'is_sharable','arrival_time','passenger_number','vehicle_type','special_request']
+
+    def form_valid(self, form):
+        form.instance.ride_owner = self.request.user
+        return super().form_valid(form)   
 
 @login_required
 def index(request):
     is_driver = Driver.objects.filter(user=request.user).exists()
     user_mode = True
     my_rides = Ride.objects.filter(ride_owner=request.user)
-    for ride in my_rides:
-        print(ride.ride_owner.username)
-    print("123333")
     return render(request, 'rides/index.html', locals())
 
 

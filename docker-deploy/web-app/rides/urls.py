@@ -3,7 +3,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import (
-    RideListView
+    RideListView,
+    RideCreateView
 )
 app_name = 'rides'
 urlpatterns = [
@@ -16,5 +17,6 @@ urlpatterns = [
          auth_views.LogoutView.as_view(template_name='rides/logout.html'),
          name='logout'),
     path('newdriver/', views.newdriver, name='newdriver'),
+    path('new/', RideCreateView.as_view(), name='newride'),
     #path('driver/', views.driver, name='driver'),
 ]

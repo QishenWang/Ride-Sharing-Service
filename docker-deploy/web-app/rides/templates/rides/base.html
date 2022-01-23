@@ -46,6 +46,7 @@
             {% else %}
 
             {% if user_mode %}
+            <a class="nav-item nav-link" href="{% url 'rides:newride' %}">New Post</a>
             <a class="nav-item nav-link" href="#">Driver Mode</a>
             {% else %}
             <a class="nav-item nav-link" href="#">User Mode</a>
