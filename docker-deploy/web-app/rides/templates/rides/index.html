@@ -14,7 +14,13 @@
         <h3><a class="mr-2" href="#">Driver: {{ ride.ride_driver.username }}</a></h3>
         {% endif %}
         <a class="article-content">Vehicle Type: {{ ride.vehicle_type }}</a>
-        <p class="article-content">Destination: {{ ride.ride_destination }}</p>
+        <div><a class="article-content">Destination: {{ ride.ride_destination }}</a></div>
+        <a class="article-content">Passenger Number: {{ ride.passenger_number }}</a>
+        {% if ride.is_sharable %}
+        <p class="article-content"> Sharable Ride</p>
+        {% else %}
+        <p class="article-content"> Non-sharable Ride</p>
+        {% endif %}
       </div>
     </article>
 {% endfor %}

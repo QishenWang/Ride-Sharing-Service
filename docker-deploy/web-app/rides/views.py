@@ -64,7 +64,7 @@ class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         ride = self.get_object()
-        if self.request.user == ride.ride_owner:
+        if self.request.user == ride.ride_owner and ride.ride_driver== None:
             return True
         return False
 
