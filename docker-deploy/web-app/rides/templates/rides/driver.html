@@ -1,6 +1,12 @@
 {% extends "rides/base.html" %}
 {% block content %}
 <h1>Hello, Driver {{user.username}}!</h1>
+<hr>
+{% if not my_rides %}
+<div><small class="article-content"> You have no ride to drive. </small>
+    <small><a class="article-content" href="#">Find a drive now!</a></small>
+</div>
+{% endif %}
 
 {% for ride in my_rides %}
 <article class="media content-section">

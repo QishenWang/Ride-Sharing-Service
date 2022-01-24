@@ -24,11 +24,12 @@ class RideListView(LoginRequiredMixin, ListView):
         context = super(RideListView, self).get_context_data(**kwargs)
         today = datetime.now().date()
         today_start = datetime.combine(today, time())
-        context['my_rides'] = self.request.user.Owner.all().filter(
-            arrival_time__gte=today_start).order_by('arrival_time')
         context['user_mode'] = True
         context['is_driver'] = Driver.objects.filter(
             user=self.request.user).exists()
+        context['my_rides'] = self.request.user.Owner.all().filter(
+            arrival_time__gte=today_start).filter(
+                is_complete=False).order_by('arrival_time')
         return context
 
 
@@ -137,7 +138,8 @@ class DriverConfirmedListView(LoginRequiredMixin, UserPassesTestMixin,
         context['is_driver'] = Driver.objects.filter(
             user=self.request.user).exists()
         context['my_rides'] = self.request.user.Driver.all().filter(
-            arrival_time__gte=today_start).order_by('arrival_time')
+            arrival_time__gte=today_start).filter(
+                is_complete=False).order_by('arrival_time')
         return context
 
 
