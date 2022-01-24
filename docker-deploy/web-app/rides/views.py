@@ -118,7 +118,8 @@ def newdriver(request):
     return render(request, 'rides/newdriver.html', locals())
 
 
-class DriverListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class DriverConfirmedListView(LoginRequiredMixin, UserPassesTestMixin,
+                              ListView):
     model = Ride
     template_name = 'rides/driver.html'  # <app>/<model>_<viewtype>.html
 
@@ -128,7 +129,8 @@ class DriverListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return False
 
     def get_context_data(self, **kwargs):
-        context = super(DriverListView, self).get_context_data(**kwargs)
+        context = super(DriverConfirmedListView,
+                        self).get_context_data(**kwargs)
         today = datetime.now().date()
         today_start = datetime.combine(today, time())
         context['user_mode'] = False
@@ -136,4 +138,25 @@ class DriverListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             user=self.request.user).exists()
         context['my_rides'] = self.request.user.Driver.all().filter(
             arrival_time__gte=today_start).order_by('arrival_time')
+        return context
+
+
+class DriverConfirmedDetailView(LoginRequiredMixin, UserPassesTestMixin,
+                                DetailView):
+    model = Ride
+    template_name = 'rides/driver_confirmed_ride_detail.html'
+
+    def test_func(self):
+        if Driver.objects.filter(user=self.request.user).exists():
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super(DriverConfirmedDetailView,
+                        self).get_context_data(**kwargs)
+        today = datetime.now().date()
+        today_start = datetime.combine(today, time())
+        context['user_mode'] = False
+        context['is_driver'] = Driver.objects.filter(
+            user=self.request.user).exists()
         return context
