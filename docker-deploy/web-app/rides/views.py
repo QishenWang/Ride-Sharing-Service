@@ -64,7 +64,7 @@ class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         ride = self.get_object()
-        if self.request.user == ride.ride_owner and ride.ride_driver== None:
+        if self.request.user == ride.ride_owner and ride.ride_driver == None:
             return True
         return False
 
@@ -118,8 +118,22 @@ def newdriver(request):
     return render(request, 'rides/newdriver.html', locals())
 
 
-@login_required
-def driver(request):
-    is_driver = Driver.objects.filter(user=request.user).exists()
-    user_mode = False
-    return render(request, 'rides/driver.html', locals())
+class DriverListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Ride
+    template_name = 'rides/driver.html'  # <app>/<model>_<viewtype>.html
+
+    def test_func(self):
+        if Driver.objects.filter(user=self.request.user).exists():
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super(DriverListView, self).get_context_data(**kwargs)
+        today = datetime.now().date()
+        today_start = datetime.combine(today, time())
+        context['user_mode'] = False
+        context['is_driver'] = Driver.objects.filter(
+            user=self.request.user).exists()
+        context['my_rides'] = self.request.user.Driver.all().filter(
+            arrival_time__gte=today_start).order_by('arrival_time')
+        return context

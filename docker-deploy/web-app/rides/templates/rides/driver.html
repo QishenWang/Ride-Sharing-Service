@@ -1,4 +1,24 @@
 {% extends "rides/base.html" %}
 {% block content %}
 <h1>Hello, Driver {{user.username}}!</h1>
+
+{% for ride in my_rides %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <small class="text-muted">Arrival Time: {{ ride.arrival_time|date:"F d, Y H:i" }}</small>
+        </div>
+        <h3><a class="mr-2">Rider: {{ ride.ride_owner.username }}</a></h3>
+        <a class="article-content">Vehicle Type: {{ ride.vehicle_type }}</a>
+        <div><a class="article-content">Destination: {{ ride.ride_destination }}</a></div>
+        <a class="article-content">Passenger Number: {{ ride.passenger_number }}</a>
+        {% if ride.is_sharable %}
+        <p class="article-content"> Sharable Ride</p>
+        {% else %}
+        <p class="article-content"> Non-sharable Ride</p>
+        {% endif %}
+    </div>
+</article>
+{% endfor %}
+
 {% endblock content%}
