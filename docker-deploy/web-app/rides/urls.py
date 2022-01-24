@@ -19,7 +19,10 @@ urlpatterns = [
     path('newride/', RideCreateView.as_view(), name='newride'),
     path('<int:pk>/updateride/', RideUpdateView.as_view(), name='updateride'),
     path('driver/', DriverConfirmedListView.as_view(), name='driver'),
-    path('<int:pk>/driver_ride_detail/',
+    path('<int:pk>/driver_confrimed_ride_detail/',
          DriverConfirmedDetailView.as_view(),
-         name='driver_ride_detail'),
+         name='driver_confirmed_ride_detail'),
+    path('<int:ride_id>/complete_ride/',
+         views.complete_ride,
+         name='complete_ride'),
 ]

@@ -147,16 +147,37 @@ class DriverConfirmedDetailView(LoginRequiredMixin, UserPassesTestMixin,
     template_name = 'rides/driver_confirmed_ride_detail.html'
 
     def test_func(self):
-        if Driver.objects.filter(user=self.request.user).exists():
+        ride = self.get_object()
+        driver_exists = Driver.objects.filter(user=self.request.user).exists()
+        ride_belongs_driver = ride.ride_driver.id == self.request.user.id
+        if driver_exists and ride_belongs_driver:
             return True
         return False
 
     def get_context_data(self, **kwargs):
         context = super(DriverConfirmedDetailView,
                         self).get_context_data(**kwargs)
-        today = datetime.now().date()
-        today_start = datetime.combine(today, time())
         context['user_mode'] = False
         context['is_driver'] = Driver.objects.filter(
             user=self.request.user).exists()
         return context
+
+
+@login_required
+def complete_ride(request, ride_id):
+    is_driver = Driver.objects.filter(user=request.user).exists()
+    user_mode = False
+
+    ride = Ride.objects.filter(pk=ride_id).first()
+    driver_exists = Driver.objects.filter(user=request.user).exists()
+    ride_belongs_driver = ride.ride_driver.id == request.user.id
+    if driver_exists and ride_belongs_driver:
+        ride.is_complete = True
+        ride.save()
+        print(f'!!!!!!!!!!!!Completing ride #{ride_id} !')
+    else:
+        messages.error(
+            request,
+            f'You are not autherized for completing ride #{ride_id} !')
+    object = ride
+    return render(request, 'rides/driver_confirmed_ride_detail.html', locals())
