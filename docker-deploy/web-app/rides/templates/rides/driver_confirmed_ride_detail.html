@@ -6,16 +6,16 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <small class="text-muted">Arrival Time: {{ object.arrival_time|date:"F d, Y H:i" }}</small>
+            <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+            </h3>
         </div>
-        <h3><a class="mr-2">Rider: {{ object.ride_owner.username }}</a></h3>
-        <a class="article-content">Vehicle Type: {{ object.vehicle_type }}</a>
-        <div><a class="article-content">Destination: {{ object.ride_destination }}</a></div>
-        <a class="article-content">Passenger Number: {{ object.passenger_number }}</a>
-        {% if object.is_sharable %}
-        <p class="article-content"> Sharable Ride</p>
+        <small class="article-content">Rider: {{ ride.ride_owner.username }}</small>
+        <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
+        <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+        {% if ride.is_sharable %}
+        <div><small class="article-content"> Sharable Ride</small></div>
         {% else %}
-        <p class="article-content"> Non-sharable Ride</p>
+        <div><small class="article-content"> Non-sharable Ride</small></div>
         {% endif %}
 
         <div>

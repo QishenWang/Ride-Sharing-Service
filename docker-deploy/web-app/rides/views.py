@@ -174,7 +174,6 @@ def complete_ride(request, ride_id):
     if driver_exists and ride_belongs_driver:
         ride.is_complete = True
         ride.save()
-        print(f'!!!!!!!!!!!!Completing ride #{ride_id} !')
     else:
         messages.error(
             request,

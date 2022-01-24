@@ -6,18 +6,19 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <small class="text-muted">Arrival Time: {{ ride.arrival_time|date:"F d, Y H:i" }}</small>
+            <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+            </h3>
+            <small>
+                <a class="article-content" href="{% url 'rides:driver_confirmed_ride_detail' ride.id %}">Detail</a>
+            </small>
         </div>
-        <h3><a class="mr-2">Rider: {{ ride.ride_owner.username }}</a></h3>
-        <p><a class="article-content" href="{% url 'rides:driver_confirmed_ride_detail' ride.id %}">Check detail</a>
-        </p>
-        <a class="article-content">Vehicle Type: {{ ride.vehicle_type }}</a>
-        <div><a class="article-content">Destination: {{ ride.ride_destination }}</a></div>
-        <a class="article-content">Passenger Number: {{ ride.passenger_number }}</a>
+        <small class="article-content">Rider: {{ ride.ride_owner.username }}</small>
+        <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
+        <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
         {% if ride.is_sharable %}
-        <p class="article-content"> Sharable Ride</p>
+        <div><small class="article-content"> Sharable Ride</small></div>
         {% else %}
-        <p class="article-content"> Non-sharable Ride</p>
+        <div><small class="article-content"> Non-sharable Ride</small></div>
         {% endif %}
     </div>
 </article>

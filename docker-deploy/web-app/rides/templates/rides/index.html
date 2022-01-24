@@ -1,27 +1,27 @@
 {% extends "rides/base.html" %}
 {% block content %}
-    <h1>Hello, {{user.username}}!</h1>
-    {% for ride in my_rides %}
-    <article class="media content-section">
-      <div class="media-body">
-        <div class="article-metadata">
-          <small class="text-muted">Arrival Time: {{ ride.arrival_time|date:"F d, Y H:i" }}</small>  
-        </div>
-        {% if not ride.ride_driver %}
-        <h3><a class="mr-2">The order is not confirmed!</a></h3>
-        </p><a class="mr-2" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a></p>
-        {% else %}
-        <h3><a class="mr-2" href="#">Driver: {{ ride.ride_driver.username }}</a></h3>
-        {% endif %}
-        <a class="article-content">Vehicle Type: {{ ride.vehicle_type }}</a>
-        <div><a class="article-content">Destination: {{ ride.ride_destination }}</a></div>
-        <a class="article-content">Passenger Number: {{ ride.passenger_number }}</a>
-        {% if ride.is_sharable %}
-        <p class="article-content"> Sharable Ride</p>
-        {% else %}
-        <p class="article-content"> Non-sharable Ride</p>
-        {% endif %}
-      </div>
-    </article>
+<h1>Hello, {{user.username}}!</h1>
+{% for ride in my_rides %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+      </h3>
+      {% if not ride.ride_driver %}
+      <small class="text-muted">The order is not confirmed!</small>
+      <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a></small>
+      {% else %}
+      <small class="text-muted">Driver: {{ ride.ride_driver.username }}</small>
+      {% endif %}
+    </div>
+    <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
+    <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+    {% if ride.is_sharable %}
+    <div><small class="article-content"> Sharable Ride</small></div>
+    {% else %}
+    <div><small class="article-content"> Non-sharable Ride</small></div>
+    {% endif %}
+  </div>
+</article>
 {% endfor %}
 {% endblock content%}
