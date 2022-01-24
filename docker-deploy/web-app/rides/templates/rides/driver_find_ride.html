@@ -1,0 +1,29 @@
+{% extends "rides/base.html" %}
+{% block content %}
+{% if not my_rides %}
+<div><small class="article-content"> There is no ride to drive. :( </small>
+</div>
+{% endif %}
+
+{% for ride in my_rides %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+            </h3>
+            <small>
+                <a class="article-content" href="#">Accept This Ride</a>
+            </small>
+        </div>
+        <small class="article-content">Rider: {{ ride.ride_owner.username }}</small>
+        <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
+        <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+        {% if ride.is_sharable %}
+        <div><small class="article-content"> Sharable Ride</small></div>
+        {% else %}
+        <div><small class="article-content"> Non-sharable Ride</small></div>
+        {% endif %}
+    </div>
+</article>
+{% endfor %}
+{% endblock content %}

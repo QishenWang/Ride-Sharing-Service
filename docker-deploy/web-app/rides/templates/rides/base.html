@@ -45,7 +45,7 @@
             <a class="nav-item nav-link" href="#">Ride History</a>
             {% else %}
             <a class="nav-item nav-link" href="{% url 'rides:driver' %}">Home</a>
-            <a class="nav-item nav-link" href="#">Find Drive</a>
+            <a class="nav-item nav-link" href="{% url 'rides:driver_find_ride' %}">Find Drive</a>
             <a class="nav-item nav-link" href="#">Drive History</a>
             {% endif %}
 

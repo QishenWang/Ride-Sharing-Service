@@ -3,7 +3,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import (RideListView, RideCreateView, RideUpdateView,
-                    DriverConfirmedListView, DriverConfirmedDetailView)
+                    DriverConfirmedListView, DriverConfirmedDetailView,
+                    DriverFindListView)
 
 app_name = 'rides'
 urlpatterns = [
@@ -25,4 +26,7 @@ urlpatterns = [
     path('<int:ride_id>/complete_ride/',
          views.complete_ride,
          name='complete_ride'),
+    path('driver_find_ride/',
+         DriverFindListView.as_view(),
+         name='driver_find_ride'),
 ]

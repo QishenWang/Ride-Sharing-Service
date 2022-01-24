@@ -182,3 +182,37 @@ def complete_ride(request, ride_id):
             f'You are not autherized for completing ride #{ride_id} !')
     object = ride
     return render(request, 'rides/driver_confirmed_ride_detail.html', locals())
+
+
+class DriverFindListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Ride
+    template_name = 'rides/driver_find_ride.html'  # <app>/<model>_<viewtype>.html
+
+    def test_func(self):
+        if Driver.objects.filter(user=self.request.user).exists():
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super(DriverFindListView, self).get_context_data(**kwargs)
+        today = datetime.now().date()
+        today_start = datetime.combine(today, time())
+        context['user_mode'] = False
+        context['is_driver'] = Driver.objects.filter(
+            user=self.request.user).exists()
+
+        self_user = self.request.user
+        self_driver = Driver.objects.filter(user=self.request.user).first()
+        context['my_rides'] = Ride.objects.filter(
+            ride_driver=None,
+            arrival_time__gt=today_start,
+            vehicle_type=self_driver.vehicle_type,
+            passenger_number__lte=self_driver.max_passenger_number,
+            special_request__in=[
+                '', self_driver.special_vehicle_info
+            ]).exclude(ride_owner=self_user).exclude(
+                ride_sharer1=self_user).exclude(
+                    ride_sharer2=self_user).exclude(
+                        ride_sharer3=self_user).exclude(
+                            ride_sharer4=self_user).order_by('arrival_time')
+        return context
