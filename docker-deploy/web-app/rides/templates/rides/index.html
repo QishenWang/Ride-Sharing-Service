@@ -1,35 +1,86 @@
 {% extends "rides/base.html" %}
 {% block content %}
-<h1>Hello, {{user.username}}!</h1>
+<h1 id="owner">Hello, {{user.username}}!</h1>
 <hr>
 
+<h3>Ride as Owner</h3>
 {% if not my_rides %}
 <div><small class="article-content"> You have no ride to take. </small>
-  <small><a class="article-content" href="{% url 'rides:newride' %}">Request a ride now!</a></small>
+  <small><a class="article-content" href=" 'rides:newride' %}">Request a ride now!</a ></small>
 </div>
 {% endif %}
 
 {% for ride in my_rides %}
-<article class="media content-section">
-  <div class="media-body">
-    <div class="article-metadata">
-      <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
-      </h3>
-      {% if not ride.ride_driver %}
-      <small class="text-muted">The order is not confirmed!</small>
-      <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a></small>
+<div class="left">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+        </h3>
+        {% if not ride.ride_driver %}
+        <small class="text-muted">The order is not confirmed!</small>
+        <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a ></small>
+        {% else %}
+        <small class="text-muted">Driver: {{ ride.ride_driver.username }}</small>
+        {% endif %}
+      </div>
+      <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
+      <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+      {% if ride.is_sharable %}
+      <div><small class="article-content"> Sharable Ride</small></div>
       {% else %}
-      <small class="text-muted">Driver: {{ ride.ride_driver.username }}</small>
+      <div><small class="article-content"> Non-sharable Ride</small></div>
       {% endif %}
     </div>
-    <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
-    <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
-    {% if ride.is_sharable %}
-    <div><small class="article-content"> Sharable Ride</small></div>
-    {% else %}
-    <div><small class="article-content"> Non-sharable Ride</small></div>
-    {% endif %}
-  </div>
-</article>
+  </article>
+</div>
 {% endfor %}
+<hr>
+
+<h3 id="sharer">Ride as Sharer</h3>
+{% if not shared_rides %}
+<div><small class="article-content"> You have no shared ride to take. </small>
+  <small><a class="article-content" href="#">Join a sharable ride!</a ></small>
+</div>
+{% endif %}
+{% for ride in shared_rides %}
+<div class="right">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+        </h3>
+        {% if not ride.ride_driver %}
+        <small class="text-muted">The order is not confirmed!</small>
+        <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a ></small>
+        {% else %}
+        <small class="text-muted">Driver: {{ ride.ride_driver.username }}</small>
+        {% endif %}
+      </div>
+      <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
+      <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+      {% if ride.is_sharable %}
+      <div><small class="article-content"> Sharable Ride</small></div>
+      {% else %}
+      <div><small class="article-content"> Non-sharable Ride</small></div>
+      {% endif %}
+    </div>
+  </article>
+</div>
+{% endfor %}
+
 {% endblock content%}
+
+{% block sidebar %}
+<div class="col-md-3" style="position: fixed; right: 50px; top: 28%;">
+  <div class="content-section">
+    <h3 class="text-muted">Shortcut</h3>
+    <p class='text-muted'>Links to list of contents.
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-light"><a href="#owner" style="color: plum">Ride as Owner</a ></li>
+      <li class="list-group-item list-group-item-light"><a href="#sharer" style="color: plum">Ride as Sharer</a ></li>
+    </ul>
+    </p >
+  </div>
+</div>
+{% endblock sidebar %}

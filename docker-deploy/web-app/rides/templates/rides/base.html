@@ -41,7 +41,7 @@
             {% if not is_driver or user_mode%}
             <a class="nav-item nav-link" href="{% url 'rides:index' %}">Home</a>
             <a class="nav-item nav-link" href="{% url 'rides:newride' %}">New Ride</a>
-            <a class="nav-item nav-link" href="#">Share Ride</a>
+            <a class="nav-item nav-link" href="{% url 'rides:sharer_search'%}">Share Ride</a>
             <a class="nav-item nav-link" href="{% url 'rides:ride_history' %}">Ride History</a>
             {% else %}
             <a class="nav-item nav-link" href="{% url 'rides:driver' %}">Home</a>
@@ -92,6 +92,7 @@
         {% endif %}
         {% block content %}{% endblock %}
       </div>
+      {% block sidebar %}{% endblock %}
     </div>
   </main>
 

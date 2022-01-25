@@ -12,6 +12,12 @@ class RegisterForm(UserCreationForm):
         fields = ['username', 'email', 'password1',
                   'password2']  #The fields and order of fields that are shown
 
+class SharerSearchForm(forms.Form):
+    sharer_destination = forms.CharField(label='Your destination', max_length=100)
+    earliest_arrival_time = forms.DateTimeField(help_text='Format: 2022-02-14 12:00')
+    latest_arrival_time = forms.DateTimeField(help_text='Format: 2022-02-14 12:00')
+    passenger_number = forms.IntegerField()
+
 
 class DriverProfileForm(forms.ModelForm):
 
