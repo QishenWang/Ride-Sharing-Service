@@ -4,7 +4,8 @@ from . import views
 from django.contrib.auth import views as auth_views
 from .views import (RideListView, RideCreateView, RideUpdateView,
                     DriverConfirmedListView, DriverConfirmedDetailView,
-                    DriverFindListView, DriverHistoryListView,RideHistoryListView, ShareListView)
+                    DriverFindListView, DriverHistoryListView,
+                    RideHistoryListView, ShareListView)
 
 app_name = 'rides'
 urlpatterns = [
@@ -31,17 +32,11 @@ urlpatterns = [
          name='driver_find_ride'),
     path('<int:ride_id>/confirm_ride/',
          views.confirm_ride,
-         name='confirm_ride'), 
+         name='confirm_ride'),
     path('driver_history/',
          DriverHistoryListView.as_view(),
-         name='driver_history'),  
-     path('ride_history/',
-         RideHistoryListView.as_view(),
-         name='ride_history'),
-     path('sharer_search/',
-         views.sharerSearch,
-         name='sharer_search'),  
-     path('ridesharer_list/',
-         ShareListView.as_view(),
-         name='ridesharer_list'),    
+         name='driver_history'),
+    path('ride_history/', RideHistoryListView.as_view(), name='ride_history'),
+    path('sharer_search/', views.sharer_search, name='sharer_search'),
+    path('ridesharer_list/', ShareListView.as_view(), name='ridesharer_list'),
 ]

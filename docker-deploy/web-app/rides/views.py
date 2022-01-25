@@ -307,7 +307,7 @@ class ShareListView(LoginRequiredMixin, ListView):
         return context
 
 
-def sharerSearch(request):
+def sharer_search(request):
     title = 'Sharer Search'
     is_driver = Driver.objects.filter(user=request.user).exists()
     user_mode = True
@@ -345,3 +345,4 @@ def sharerSearch(request):
                                         ride_sharer4=self_user).order_by(
                                             'arrival_time')
             return render(request, 'rides/ridesharer_list.html', locals())
+        return render(request, 'rides/sharer_search.html', locals())
