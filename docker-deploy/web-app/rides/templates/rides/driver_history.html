@@ -3,7 +3,7 @@
 <h1>Hello, Driver {{user.username}}!</h1>
 <hr>
 {% if not my_rides %}
-<div><small class="article-content"> You have no ride to drive. </small>
+<div><small class="article-content"> You have no ride history. </small>
     <small><a class="article-content" href="{% url 'rides:driver_find_ride' %}">Find a ride now!</a></small>
 </div>
 {% endif %}
@@ -12,11 +12,8 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+            <h3 class="Ride-Title text-muted">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
             </h3>
-            <small>
-                <a class="article-content" href="{% url 'rides:driver_confirmed_ride_detail' ride.id %}">Detail</a>
-            </small>
         </div>
         <small class="article-content">Rider: {{ ride.ride_owner.username }}</small>
         <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>

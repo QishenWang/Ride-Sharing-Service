@@ -254,3 +254,38 @@ def confirm_ride(request, ride_id):
                         ride_sharer3=self_user).exclude(
                             ride_sharer4=self_user).order_by('arrival_time')
     return render(request, 'rides/driver_find_ride.html', locals())
+
+
+class DriverHistoryListView(LoginRequiredMixin, UserPassesTestMixin,
+                              ListView):
+    model = Ride
+    template_name = 'rides/driver_history.html'  # <app>/<model>_<viewtype>.html
+
+    def test_func(self):
+        if Driver.objects.filter(user=self.request.user).exists():
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super(DriverHistoryListView,
+                        self).get_context_data(**kwargs)
+        context['user_mode'] = False
+        context['is_driver'] = Driver.objects.filter(
+            user=self.request.user).exists()
+        context['my_rides'] = self.request.user.Driver.all().filter(
+                is_complete=True).order_by('-arrival_time')
+        return context  
+
+
+class RideHistoryListView(LoginRequiredMixin, ListView):
+    model = Ride
+    template_name = 'rides/ride_history.html'  # <app>/<model>_<viewtype>.html
+
+    def get_context_data(self, **kwargs):
+        context = super(RideHistoryListView, self).get_context_data(**kwargs)
+        context['user_mode'] = True
+        context['is_driver'] = Driver.objects.filter(
+            user=self.request.user).exists()
+        context['my_rides'] = self.request.user.Owner.all().filter(
+                is_complete=True).order_by('arrival_time')
+        return context

@@ -42,11 +42,11 @@
             <a class="nav-item nav-link" href="{% url 'rides:index' %}">Home</a>
             <a class="nav-item nav-link" href="{% url 'rides:newride' %}">New Ride</a>
             <a class="nav-item nav-link" href="#">Share Ride</a>
-            <a class="nav-item nav-link" href="#">Ride History</a>
+            <a class="nav-item nav-link" href="{% url 'rides:ride_history' %}">Ride History</a>
             {% else %}
             <a class="nav-item nav-link" href="{% url 'rides:driver' %}">Home</a>
             <a class="nav-item nav-link" href="{% url 'rides:driver_find_ride' %}">Find Drive</a>
-            <a class="nav-item nav-link" href="#">Drive History</a>
+            <a class="nav-item nav-link" href="{% url 'rides:driver_history' %}">Drive History</a>
             {% endif %}
 
             {% endif %}
