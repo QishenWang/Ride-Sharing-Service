@@ -298,7 +298,7 @@ class ShareListView(LoginRequiredMixin, ListView):
     template_name = 'rides/ridesharer_list.html'
 
     def get_context_data(self, **kwargs):
-        my_rides = self.request.POST.get('my_rides',None)
+        my_rides = self.request.POST.get('my_rides', None)
         context = super(ShareListView, self).get_context_data(**kwargs)
         context['user_mode'] = True
         context['my_rides'] = my_rides
@@ -307,20 +307,22 @@ class ShareListView(LoginRequiredMixin, ListView):
         return context
 
 
-
 def sharerSearch(request):
     title = 'Sharer Search'
-    if request.method=='GET':
+    is_driver = Driver.objects.filter(user=request.user).exists()
+    user_mode = True
+    if request.method == 'GET':
         search_form = forms.SharerSearchForm()
-        return render(request, 'rides/sharer_search.html',{'search_form':search_form})
-    if request.method=='POST':
+        # return render(request, 'rides/sharer_search.html',
+        #               {'search_form': search_form})
+        return render(request, 'rides/sharer_search.html', locals())
+    if request.method == 'POST':
         search_form = forms.SharerSearchForm(request.POST)
         if search_form.is_valid():
             sharer_destination = search_form.data.get('sharer_destination')
             earliest_arrival_time = search_form.data.get(
                 'earliest_arrival_time')
-            latest_arrival_time = search_form.data.get(
-                'latest_arrival_time')
+            latest_arrival_time = search_form.data.get('latest_arrival_time')
             passenger_number = search_form.data.get('passenger_number')
             self_user = request.user
             today = datetime.now().date()
@@ -335,10 +337,11 @@ def sharerSearch(request):
                 is_sharable=True).filter(
                     Q(ride_sharer1=None) | Q(ride_sharer2=None)
                     | Q(ride_sharer3=None)
-                    | Q(ride_sharer4=None)).exclude(ride_owner=self_user).exclude(
-                        ride_sharer1=self_user
-                    ).exclude(ride_sharer2=self_user).exclude(
-                        ride_sharer3=self_user).exclude(
-                            ride_sharer4=self_user).order_by('arrival_time')
+                    | Q(ride_sharer4=None)).exclude(
+                        ride_owner=self_user).exclude(
+                            ride_sharer1=self_user).exclude(
+                                ride_sharer2=self_user).exclude(
+                                    ride_sharer3=self_user).exclude(
+                                        ride_sharer4=self_user).order_by(
+                                            'arrival_time')
             return render(request, 'rides/ridesharer_list.html', locals())
- 
