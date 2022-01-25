@@ -15,7 +15,8 @@ class RegisterForm(UserCreationForm):
 
 class SharerSearchForm(forms.Form):
     sharer_destination = forms.CharField(label='Your destination',
-                                         max_length=100)
+                                         max_length=100,
+                                         required=False)
     earliest_arrival_time = forms.DateTimeField(
         help_text='Format: 2022-02-14 12:00')
     latest_arrival_time = forms.DateTimeField(

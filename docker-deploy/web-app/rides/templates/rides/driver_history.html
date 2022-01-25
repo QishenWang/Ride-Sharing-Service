@@ -12,7 +12,8 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <h3 class="Ride-Title text-muted">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+            <h3 class="Ride-Title text-muted">Arrived {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{
+                ride.ride_destination }}
             </h3>
         </div>
         <small class="article-content">Rider: {{ ride.ride_owner.username }}</small>

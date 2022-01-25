@@ -333,7 +333,7 @@ def sharer_search(request):
                 arrival_time__gte=earliest_arrival_time,
                 arrival_time__lte=latest_arrival_time,
                 #passenger_number__lte=self_driver.max_passenger_number,
-                ride_destination=sharer_destination,
+                ride_destination__contains=sharer_destination,
                 is_sharable=True).filter(
                     Q(ride_sharer1=None) | Q(ride_sharer2=None)
                     | Q(ride_sharer3=None)
@@ -346,3 +346,41 @@ def sharer_search(request):
                                             'arrival_time')
             return render(request, 'rides/ridesharer_list.html', locals())
         return render(request, 'rides/sharer_search.html', locals())
+
+
+@login_required
+def join_ride(request, ride_id, passenger_num):
+    is_driver = Driver.objects.filter(user=request.user).exists()
+    user_mode = False
+
+    # TODO: Check passanger number?????
+    # open & sharable & 有位置 & 他自己本来没在里面（不是driver/sharer/owner）
+    ride = Ride.objects.filter(pk=ride_id).first()
+
+    valid_share = (ride.ride_driver
+                   == None) and (not ride.is_complete) and (ride.is_sharable)
+    has_seat = (ride.ride_sharer1 == None) or (ride.ride_sharer2 == None) or (
+        ride.ride_sharer3 == None) or (ride.ride_sharer4 == None)
+    not_related_ride = (ride.ride_owner != request.user) and (
+        ride.ride_sharer1 !=
+        request.user) and (ride.ride_sharer2 != request.user) and (
+            ride.ride_sharer3 != request.user) and (ride.ride_sharer4 !=
+                                                    request.user)
+    if valid_share and has_seat and not_related_ride:
+        if not ride.ride_sharer1:
+            ride.ride_sharer1 = request.user
+        elif not ride.ride_sharer2:
+            ride.ride_sharer2 = request.user
+        elif not ride.ride_sharer3:
+            ride.ride_sharer3 = request.user
+        elif not ride.ride_sharer4:
+            ride.ride_sharer4 = request.user
+        ride.passenger_number = ride.passenger_number + passenger_num
+        ride.save()
+        messages.success(request,
+                         f'You have successfully joined ride #{ride_id} !')
+    else:
+        messages.error(
+            request, f'You are not autherized for joining ride #{ride_id} !')
+
+    return render(request, 'rides/index.html', locals())
