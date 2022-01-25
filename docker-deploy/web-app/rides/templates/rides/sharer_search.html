@@ -5,7 +5,7 @@
   {{'Search rides to share!'}}
 </div>
 {% load static %}
-<form action="{% url 'rides:ridesharer_list' %}">
+<form method= "post">
   {% csrf_token %}
 
   <hr>

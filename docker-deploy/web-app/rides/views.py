@@ -298,43 +298,47 @@ class ShareListView(LoginRequiredMixin, ListView):
     template_name = 'rides/ridesharer_list.html'
 
     def get_context_data(self, **kwargs):
+        my_rides = self.request.POST.get('my_rides',None)
         context = super(ShareListView, self).get_context_data(**kwargs)
         context['user_mode'] = True
+        context['my_rides'] = my_rides
         context['is_driver'] = Driver.objects.filter(
             user=self.request.user).exists()
         return context
 
 
+
 def sharerSearch(request):
     title = 'Sharer Search'
-    search_form = forms.SharerSearchForm()
-    if search_form.is_valid():
-        sharer_destination = search_form.cleaned_data.get('sharer_destination')
-        earliest_arrival_time = search_form.cleaned_data.get(
-            'earliest_arrival_time')
-        latest_arrival_time = search_form.cleaned_data.get(
-            'latest_arrival_time')
-        passenger_number = search_form.cleaned_data.get('passenger_number')
-        self_user = request.user
-        today = datetime.now().date()
-        today_start = datetime.combine(today, time())
-
-        my_rides = Ride.objects.filter(
-            ride_driver=None,
-            arrival_time__gt=today_start,
-            arrival_time__gte=earliest_arrival_time,
-            arrival_time__lte=latest_arrival_time,
-            #passenger_number__lte=self_driver.max_passenger_number,
-            ride_destination=sharer_destination,
-            is_sharable=True).filter(
-                Q(ride_sharer1=None) | Q(ride_sharer2=None)
-                | Q(ride_sharer3=None)
-                | Q(ride_sharer4=None)).exclude(ride_owner=self_user).exclude(
-                    ride_sharer1=self_user
-                ).exclude(ride_sharer2=self_user).exclude(
-                    ride_sharer3=self_user).exclude(
-                        ride_sharer4=self_user).order_by('arrival_time')
-        render(request, 'rides/ridesharer_list.html', locals())
-    else:
+    if request.method=='GET':
         search_form = forms.SharerSearchForm()
-    return render(request, 'rides/sharer_search.html', locals())
+        return render(request, 'rides/sharer_search.html',{'search_form':search_form})
+    if request.method=='POST':
+        search_form = forms.SharerSearchForm(request.POST)
+        if search_form.is_valid():
+            sharer_destination = search_form.data.get('sharer_destination')
+            earliest_arrival_time = search_form.data.get(
+                'earliest_arrival_time')
+            latest_arrival_time = search_form.data.get(
+                'latest_arrival_time')
+            passenger_number = search_form.data.get('passenger_number')
+            self_user = request.user
+            today = datetime.now().date()
+            today_start = datetime.combine(today, time())
+            my_rides = Ride.objects.filter(
+                ride_driver=None,
+                arrival_time__gt=today_start,
+                arrival_time__gte=earliest_arrival_time,
+                arrival_time__lte=latest_arrival_time,
+                #passenger_number__lte=self_driver.max_passenger_number,
+                ride_destination=sharer_destination,
+                is_sharable=True).filter(
+                    Q(ride_sharer1=None) | Q(ride_sharer2=None)
+                    | Q(ride_sharer3=None)
+                    | Q(ride_sharer4=None)).exclude(ride_owner=self_user).exclude(
+                        ride_sharer1=self_user
+                    ).exclude(ride_sharer2=self_user).exclude(
+                        ride_sharer3=self_user).exclude(
+                            ride_sharer4=self_user).order_by('arrival_time')
+            return render(request, 'rides/ridesharer_list.html', locals())
+ 
