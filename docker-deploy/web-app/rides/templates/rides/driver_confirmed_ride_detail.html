@@ -20,11 +20,11 @@
 
         <div>
             <!-- <a class="btn btn-secondary btn-sm mt-1 mb-1" href=#">Update</a> -->
-            {% if not object.is_complete %}
-            <a class="btn btn-danger Button btn-sm mt-1 mb-1" href="{% url 'rides:complete_ride' object.id %}">Complete
+            {% if not ride.is_complete %}
+            <a class="btn btn-danger Button btn-sm mt-1 mb-1" href="{% url 'rides:complete_ride' ride.id %}">Complete
                 Ride</a>
             {% else %}
-            <a class="mt-1 mb-1"">Already Completed Ride</a>
+            <a class="mt-1 mb-1">Already Completed Ride</a>
             {% endif %}
         </div>
     </div>

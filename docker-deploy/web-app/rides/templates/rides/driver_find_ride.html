@@ -12,7 +12,7 @@
             <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
             </h3>
             <small>
-                <a class="article-content" href="#">Accept This Ride</a>
+                <a class="article-content" href="{% url 'rides:confirm_ride' ride.id %}">Accept This Ride</a>
             </small>
         </div>
         <small class="article-content">Rider: {{ ride.ride_owner.username }}</small>

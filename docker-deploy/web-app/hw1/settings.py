@@ -140,3 +140,11 @@ LOGIN_REDIRECT_URL = '/rides'
 LOGIN_URL = '/rides/login'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_HOST_USER = 'BestAmazingRides@outlook.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_PASSWORD = 'YutongQishen'
+EMAIL_PORT = 587
+

@@ -14,7 +14,7 @@ from datetime import datetime, timedelta, time
 
 from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
                                   DeleteView)
-
+from django.core.mail import send_mail
 
 class RideListView(LoginRequiredMixin, ListView):
     model = Ride
@@ -180,7 +180,6 @@ def complete_ride(request, ride_id):
         messages.error(
             request,
             f'You are not autherized for completing ride #{ride_id} !')
-    object = ride
     return render(request, 'rides/driver_confirmed_ride_detail.html', locals())
 
 
@@ -216,3 +215,42 @@ class DriverFindListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                         ride_sharer3=self_user).exclude(
                             ride_sharer4=self_user).order_by('arrival_time')
         return context
+
+@login_required
+def confirm_ride(request, ride_id):
+    is_driver = Driver.objects.filter(user=request.user).exists()
+    user_mode = False
+
+    ride = Ride.objects.filter(pk=ride_id).first()
+    driver_exists = Driver.objects.filter(user=request.user).exists()
+    if driver_exists:
+        ride.ride_driver = request.user
+        ride.save()
+        send_mail('Your ride is confirmed! -- The Best Amazing Rides App',
+        f'Hi there!\n\nThis is an email from The Best Amazing Rides!\nYour ride #{ride.id} has been confirmed by {request.user.username}.\nEnjoy your ride!\n\nCheers!!!',
+        'BestAmazingRides@outlook.com',
+            [ride.ride_owner.email],
+            fail_silently=False,
+            )
+        messages.success(request,f'You have successfully confirmed ride #{ride_id} !')
+    else:
+        messages.error(
+            request,
+            f'You are not autherized for confirming ride #{ride_id} !')
+    self_user = request.user
+    self_driver = Driver.objects.filter(user=request.user).first()
+    today = datetime.now().date()
+    today_start = datetime.combine(today, time())
+    my_rides = Ride.objects.filter(
+            ride_driver=None,
+            arrival_time__gt=today_start,
+            vehicle_type=self_driver.vehicle_type,
+            passenger_number__lte=self_driver.max_passenger_number,
+            special_request__in=[
+                '', self_driver.special_vehicle_info
+            ]).exclude(ride_owner=self_user).exclude(
+                ride_sharer1=self_user).exclude(
+                    ride_sharer2=self_user).exclude(
+                        ride_sharer3=self_user).exclude(
+                            ride_sharer4=self_user).order_by('arrival_time')
+    return render(request, 'rides/driver_find_ride.html', locals())

@@ -29,4 +29,7 @@ urlpatterns = [
     path('driver_find_ride/',
          DriverFindListView.as_view(),
          name='driver_find_ride'),
+    path('<int:ride_id>/confirm_ride/',
+         views.confirm_ride,
+         name='confirm_ride'), 
 ]
