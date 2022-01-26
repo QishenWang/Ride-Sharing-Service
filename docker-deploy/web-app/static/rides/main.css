@@ -103,3 +103,10 @@ body {
     font-size: 25px;
   }
   
+  .delete-link {
+    color: red;
+  }
+  
+  .delete-link:hover {
+    color: inherit;
+  }

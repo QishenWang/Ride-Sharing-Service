@@ -20,6 +20,9 @@
         {% if not ride.ride_driver %}
         <small class="text-muted">The order is not confirmed!</small>
         <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a></small>
+        <small>
+          <a class="article-content delete-link" href="{% url 'rides:delete_ride' ride.id %}"> Delete this ride
+          </a></small>
         {% else %}
         <small class="text-muted">Driver: {{ ride.ride_driver.username }}</small>
         {% endif %}

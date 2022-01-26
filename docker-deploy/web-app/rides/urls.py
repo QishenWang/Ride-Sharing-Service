@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 from .views import (RideListView, RideCreateView, RideUpdateView,
                     DriverConfirmedListView, DriverConfirmedDetailView,
                     DriverFindListView, DriverHistoryListView,
-                    RideHistoryListView, ShareListView)
+                    RideHistoryListView, ShareListView, RideDeleteView)
 
 app_name = 'rides'
 urlpatterns = [
@@ -42,4 +42,6 @@ urlpatterns = [
     path('<int:ride_id>/join_ride/<int:passenger_number>',
          views.join_ride,
          name='join_ride'),
+    path('<int:pk>/delete_ride/', RideDeleteView.as_view(),
+         name='delete_ride'),
 ]

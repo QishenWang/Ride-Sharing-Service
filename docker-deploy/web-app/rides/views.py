@@ -1,4 +1,3 @@
-from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -337,6 +336,7 @@ class ShareListView(LoginRequiredMixin, ListView):
         return context
 
 
+@login_required
 def sharer_search(request):
     title = 'Sharer Search'
     is_driver = Driver.objects.filter(user=request.user).exists()
@@ -404,3 +404,14 @@ def join_ride(request, ride_id, passenger_number):
             request, f'You are not autherized for joining ride #{ride_id} !')
 
     return render(request, 'rides/index.html', locals())
+
+
+class RideDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Ride
+    success_url = '/rides/'
+
+    def test_func(self):
+        ride = self.get_object()
+        if self.request.user == ride.ride_owner:
+            return True
+        return False
