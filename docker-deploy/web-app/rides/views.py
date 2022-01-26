@@ -32,6 +32,11 @@ class RideListView(LoginRequiredMixin, ListView):
         context['my_rides'] = self.request.user.Owner.all().filter(
             arrival_time__gte=today_start).filter(
                 is_complete=False).order_by('arrival_time')
+        context['shared_rides'] = Ride.objects.filter(
+            Q(ride_sharer1=self.request.user)
+            | Q(ride_sharer2=self.request.user)
+            | Q(ride_sharer3=self.request.user)
+            | Q(ride_sharer4=self.request.user))
         return context
 
 

@@ -6,7 +6,7 @@
 <h3>Ride as Owner</h3>
 {% if not my_rides %}
 <div><small class="article-content"> You have no ride to take. </small>
-  <small><a class="article-content" href=" 'rides:newride' %}">Request a ride now!</a ></small>
+  <small><a class="article-content" href=" 'rides:newride' %}">Request a ride now!</a></small>
 </div>
 {% endif %}
 
@@ -19,7 +19,7 @@
         </h3>
         {% if not ride.ride_driver %}
         <small class="text-muted">The order is not confirmed!</small>
-        <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a ></small>
+        <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a></small>
         {% else %}
         <small class="text-muted">Driver: {{ ride.ride_driver.username }}</small>
         {% endif %}
@@ -40,7 +40,7 @@
 <h3 id="sharer">Ride as Sharer</h3>
 {% if not shared_rides %}
 <div><small class="article-content"> You have no shared ride to take. </small>
-  <small><a class="article-content" href="#">Join a sharable ride!</a ></small>
+  <small><a class="article-content" href="{% url 'rides:sharer_search'%}">Join a sharable ride!</a></small>
 </div>
 {% endif %}
 {% for ride in shared_rides %}
@@ -52,7 +52,7 @@
         </h3>
         {% if not ride.ride_driver %}
         <small class="text-muted">The order is not confirmed!</small>
-        <small><a class="article-content" href="{% url 'rides:updateride' ride.id %}">Edit your ride</a ></small>
+        <small><a class="article-content" href="#">Quit this ride</a></small>
         {% else %}
         <small class="text-muted">Driver: {{ ride.ride_driver.username }}</small>
         {% endif %}
@@ -77,10 +77,10 @@
     <h3 class="text-muted">Shortcut</h3>
     <p class='text-muted'>Links to list of contents.
     <ul class="list-group">
-      <li class="list-group-item list-group-item-light"><a href="#owner" style="color: plum">Ride as Owner</a ></li>
-      <li class="list-group-item list-group-item-light"><a href="#sharer" style="color: plum">Ride as Sharer</a ></li>
+      <li class="list-group-item list-group-item-light"><a href="#owner" style="color: plum">Ride as Owner</a></li>
+      <li class="list-group-item list-group-item-light"><a href="#sharer" style="color: plum">Ride as Sharer</a></li>
     </ul>
-    </p >
+    </p>
   </div>
 </div>
 {% endblock sidebar %}
