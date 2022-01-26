@@ -12,7 +12,8 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <h3 class="Ride-Title">Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
+            <h3 class="Ride-Title">
+                Arriving {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ ride.ride_destination }}
             </h3>
             <small>
                 <a class="article-content" href="{% url 'rides:driver_confirmed_ride_detail' ride.id %}">Detail</a>
@@ -20,7 +21,7 @@
         </div>
         <small class="article-content">Rider: {{ ride.ride_owner.username }}</small>
         <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
-        <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+        <div><small class="article-content">Passenger Number: {{ ride.total_passenger_number }}</small></div>
         {% if ride.is_sharable %}
         <div><small class="article-content"> Sharable Ride</small></div>
         {% else %}

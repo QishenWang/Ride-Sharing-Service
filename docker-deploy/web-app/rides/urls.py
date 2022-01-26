@@ -39,7 +39,7 @@ urlpatterns = [
     path('ride_history/', RideHistoryListView.as_view(), name='ride_history'),
     path('sharer_search/', views.sharer_search, name='sharer_search'),
     path('ridesharer_list/', ShareListView.as_view(), name='ridesharer_list'),
-    path('<int:ride_id>/join_ride/<int:passenger_num>',
+    path('<int:ride_id>/join_ride/<int:passenger_number>',
          views.join_ride,
          name='join_ride'),
 ]

@@ -58,10 +58,16 @@ class Ride(models.Model):
         return reverse('rides:index')
 
     def clean(self):
-        if self.arrival_time.timestamp() <= datetime.now().timestamp():
+        if self.arrival_time != None and self.arrival_time.timestamp(
+        ) <= datetime.now().timestamp():
             raise ValidationError('Arrival time is earlier than current time.')
 
+
 class ShareRecord(models.Model):
-    user = models.ForeignKey(User, related_name='Sharer', on_delete=models.CASCADE)
+    user = models.ForeignKey(User,
+                             related_name='Sharer',
+                             on_delete=models.CASCADE)
     passenger_number = models.IntegerField(default=1)
-    ride = models.ForeignKey(Ride, related_name='Ride', on_delete=models.CASCADE)
+    ride = models.ForeignKey(Ride,
+                             related_name='Ride',
+                             on_delete=models.CASCADE)
