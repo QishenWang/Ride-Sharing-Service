@@ -415,3 +415,25 @@ class RideDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == ride.ride_owner:
             return True
         return False
+
+
+class ShareDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = ShareRecord
+    success_url = '/rides/'
+
+    def test_func(self):
+        share_record = self.get_object()
+        if self.request.user == share_record.user:
+            # 从ride里面把total number 变小
+            Ride.objects.get(
+                id=share_record.ride.id
+            ).total_passenger_number -= share_record.passenger_number
+            return True
+        return False
+
+
+@login_required
+def send_share_delete_id(request, ride_id):
+    user_records = ShareRecord.objects.filter(user=request.user)
+    share_id = user_records.get(ride=ride_id).id
+    return redirect(f"/rides/{share_id}/delete_share/")
