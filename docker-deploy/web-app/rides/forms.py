@@ -32,3 +32,11 @@ class DriverProfileForm(forms.ModelForm):
             'vehicle_type', 'plate_number', 'max_passenger_number',
             'special_vehicle_info'
         ]
+
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['email']

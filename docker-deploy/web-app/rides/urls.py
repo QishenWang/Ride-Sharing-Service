@@ -18,6 +18,7 @@ urlpatterns = [
     path('logout/',
          auth_views.LogoutView.as_view(template_name='rides/logout.html'),
          name='logout'),
+    path('settings/', views.settings, name='settings'),
     path('newdriver/', views.newdriver, name='newdriver'),
     path('newride/', RideCreateView.as_view(), name='newride'),
     path('<int:pk>/updateride/', RideUpdateView.as_view(), name='updateride'),

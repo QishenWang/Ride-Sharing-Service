@@ -437,3 +437,37 @@ def send_share_delete_id(request, ride_id):
     user_records = ShareRecord.objects.filter(user=request.user)
     share_id = user_records.get(ride=ride_id).id
     return redirect(f"/rides/{share_id}/delete_share/")
+
+
+@login_required
+def settings(request):
+    is_driver = Driver.objects.filter(user=request.user).exists()
+    user_mode = True
+    if request.method == 'POST':
+        u_form = forms.UserUpdateForm(request.POST, instance=request.user)
+
+        if not is_driver:
+            if u_form.is_valid():
+                u_form.save()
+                messages.success(request,
+                                 f'Your user account has been updated!')
+                return redirect('/rides/settings/')
+        else:
+            d_form = forms.DriverProfileForm(
+                request.POST,
+                request.FILES,
+                instance=Driver.objects.get(user=request.user))
+            if u_form.is_valid() and d_form.is_valid():
+                u_form.save()
+                d_form.save()
+                messages.success(request,
+                                 f'Your driver account has been updated!')
+                return redirect('/rides/settings/')
+
+    else:
+        u_form = forms.UserUpdateForm(instance=request.user)
+        if is_driver:
+            d_form = forms.DriverProfileForm(instance=Driver.objects.get(
+                user=request.user))
+
+    return render(request, 'rides/settings.html', locals())
