@@ -202,7 +202,7 @@ def complete_ride(request, ride_id):
         ride.is_complete = True
         ride.save()
     else:
-        messages.error(
+        messages.warning(
             request,
             f'You are not autherized for completing ride #{ride_id} !')
     return render(request, 'rides/driver_confirmed_ride_detail.html', locals())
@@ -248,27 +248,38 @@ def confirm_ride(request, ride_id):
     ride = Ride.objects.filter(pk=ride_id).first()
     driver_exists = Driver.objects.filter(user=request.user).exists()
     if driver_exists:
-        ride.ride_driver = request.user
-        ride.save()
-        send_mail(
-            'Your ride is confirmed! -- The Best Amazing Rides App',
-            f'Hi there!\n\nThis is an email from The Best Amazing Rides!\nYour ride #{ride.id} has been confirmed by {request.user.username}.\nEnjoy your ride!\n\nCheers!!!\nThe Best Amazing Rides App',
-            'BestAmazingRides@outlook.com',
-            [ride.ride_owner.email],
-            fail_silently=False,
-        )
-        messages.success(request,
-                         f'You have successfully confirmed ride #{ride_id} !')
-        for sharer in get_shared_users(ride):
+        driver = Driver.objects.get(user=request.user)
+        valid_ride = (
+            ride.total_passenger_number <= driver.max_passenger_number) and (
+                ride.ride_driver
+                == None) and (ride.vehicle_type == driver.vehicle_type) and (
+                    driver.special_vehicle_info in ['', ride.special_request])
+        if valid_ride:
+            ride.ride_driver = request.user
+            ride.save()
             send_mail(
                 'Your ride is confirmed! -- The Best Amazing Rides App',
-                f'Hi there!\n\nThis is an email from The Best Amazing Rides!\nYour shared ride #{ride.id} has been confirmed by {request.user.username}.\nEnjoy your ride!\n\nCheers!!!\nThe Best Amazing Rides App',
+                f'Hi there!\n\nThis is an email from The Best Amazing Rides!\nYour ride #{ride.id} has been confirmed by {request.user.username}.\nEnjoy your ride!\n\nCheers!!!\nThe Best Amazing Rides App',
                 'BestAmazingRides@outlook.com',
-                [sharer.email],
+                [ride.ride_owner.email],
                 fail_silently=False,
             )
+            messages.success(
+                request, f'You have successfully confirmed ride #{ride_id} !')
+            for sharer in get_shared_users(ride):
+                send_mail(
+                    'Your ride is confirmed! -- The Best Amazing Rides App',
+                    f'Hi there!\n\nThis is an email from The Best Amazing Rides!\nYour shared ride #{ride.id} has been confirmed by {request.user.username}.\nEnjoy your ride!\n\nCheers!!!\nThe Best Amazing Rides App',
+                    'BestAmazingRides@outlook.com',
+                    [sharer.email],
+                    fail_silently=False,
+                )
+        else:
+            messages.warning(
+                request,
+                f'You are not autherized for confirming ride #{ride_id} !')
     else:
-        messages.error(
+        messages.warning(
             request,
             f'You are not autherized for confirming ride #{ride_id} !')
     self_user = request.user
@@ -400,7 +411,7 @@ def join_ride(request, ride_id, passenger_number):
         messages.success(request,
                          f'You have successfully joined ride #{ride_id} !')
     else:
-        messages.error(
+        messages.warning(
             request, f'You are not autherized for joining ride #{ride_id} !')
 
     return render(request, 'rides/index.html', locals())
