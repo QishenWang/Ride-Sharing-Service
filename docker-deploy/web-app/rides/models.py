@@ -43,6 +43,7 @@ class Ride(models.Model):
     is_sharable = models.BooleanField(default=False)
     arrival_time = models.DateTimeField(help_text='Format: 2022-02-14 12:00')
     passenger_number = models.IntegerField(default=1)
+    total_passenger_number = models.IntegerField(default=1)
     vehicle_type = models.CharField(max_length=10,
                                     choices=VEHICLE_TYPE,
                                     default="SUV")

@@ -22,6 +22,14 @@ def get_shared_rides(user):
     records = user.Sharer.all()
     ride_id = records.values_list('ride')
     return Ride.objects.filter(id__in=ride_id)
+def get_shared_users(ride):
+    records = ride.Ride.all()
+    user_id = records.values_list('user')
+    return User.objects.filter(id__in=user_id)
+
+def get_shared_rides_id(user):
+    records = user.Sharer.all()
+    return records.values_list('ride')
 
 class RideListView(LoginRequiredMixin, ListView):
     model = Ride
@@ -37,7 +45,6 @@ class RideListView(LoginRequiredMixin, ListView):
         context['my_rides'] = self.request.user.Owner.all().filter(
             arrival_time__gte=today_start).filter(
                 is_complete=False).order_by('arrival_time')
-        
         context['shared_rides'] = get_shared_rides(self.request.user).filter(
             arrival_time__gte=today_start).filter(
                 is_complete=False).order_by('arrival_time')
@@ -53,6 +60,7 @@ class RideCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.ride_owner = self.request.user
+        form.instance.total_passenger_number = form.instance.passenger_number
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -72,6 +80,7 @@ class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.ride_owner = self.request.user
+        form.instance.total_passenger_number += form.instance.passenger_number - Ride.objects.filter(id=form.instance.id).first().passenger_number
         return super().form_valid(form)
 
     def test_func(self):
@@ -213,18 +222,15 @@ class DriverFindListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
         self_user = self.request.user
         self_driver = Driver.objects.filter(user=self.request.user).first()
+        
         context['my_rides'] = Ride.objects.filter(
             ride_driver=None,
             arrival_time__gt=today_start,
             vehicle_type=self_driver.vehicle_type,
-            passenger_number__lte=self_driver.max_passenger_number,
+            total_passenger_number__lte=self_driver.max_passenger_number,
             special_request__in=[
                 '', self_driver.special_vehicle_info
-            ]).exclude(ride_owner=self_user).exclude(
-                ride_sharer1=self_user).exclude(
-                    ride_sharer2=self_user).exclude(
-                        ride_sharer3=self_user).exclude(
-                            ride_sharer4=self_user).order_by('arrival_time')
+            ]).exclude(ride_owner=self_user).exclude(id__in=get_shared_rides_id(self_user)).order_by('arrival_time')
         return context
 
 
@@ -247,6 +253,14 @@ def confirm_ride(request, ride_id):
         )
         messages.success(request,
                          f'You have successfully confirmed ride #{ride_id} !')
+        for sharer in get_shared_users(ride):
+            send_mail(
+            'Your ride is confirmed! -- The Best Amazing Rides App',
+            f'Hi there!\n\nThis is an email from The Best Amazing Rides!\nYour ride #{ride.id} has been confirmed by {request.user.username}.\nEnjoy your ride!\n\nCheers!!!',
+            'BestAmazingRides@outlook.com',
+            [sharer.email],
+            fail_silently=False,
+        )
     else:
         messages.error(
             request,
@@ -259,13 +273,10 @@ def confirm_ride(request, ride_id):
         ride_driver=None,
         arrival_time__gt=today_start,
         vehicle_type=self_driver.vehicle_type,
-        passenger_number__lte=self_driver.max_passenger_number,
+        total_passenger_number__lte=self_driver.max_passenger_number,
         special_request__in=[
             '', self_driver.special_vehicle_info
-        ]).exclude(ride_owner=self_user).exclude(
-            ride_sharer1=self_user).exclude(ride_sharer2=self_user).exclude(
-                ride_sharer3=self_user).exclude(
-                    ride_sharer4=self_user).order_by('arrival_time')
+        ]).exclude(ride_owner=self_user).exclude(id__in=get_shared_rides_id(self_user)).order_by('arrival_time')
     return render(request, 'rides/driver_find_ride.html', locals())
 
 
@@ -287,7 +298,7 @@ class DriverHistoryListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             is_complete=True).order_by('-arrival_time')
         return context
 
-
+#TODO: share record refactor !!!!!
 class RideHistoryListView(LoginRequiredMixin, ListView):
     model = Ride
     template_name = 'rides/ride_history.html'  # <app>/<model>_<viewtype>.html
