@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.contrib.auth.models import User
-from .models import Driver, Ride
+from .models import Driver, Ride, ShareRecord
 from . import forms
 from . import models
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -17,6 +17,11 @@ from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
 from django.core.mail import send_mail
 from django.db.models import Q
 
+
+def get_shared_rides(user):
+    records = user.Sharer.all()
+    ride_id = records.values_list('ride')
+    return Ride.objects.filter(id__in=ride_id)
 
 class RideListView(LoginRequiredMixin, ListView):
     model = Ride
@@ -32,11 +37,10 @@ class RideListView(LoginRequiredMixin, ListView):
         context['my_rides'] = self.request.user.Owner.all().filter(
             arrival_time__gte=today_start).filter(
                 is_complete=False).order_by('arrival_time')
-        context['shared_rides'] = Ride.objects.filter(
-            Q(ride_sharer1=self.request.user)
-            | Q(ride_sharer2=self.request.user)
-            | Q(ride_sharer3=self.request.user)
-            | Q(ride_sharer4=self.request.user))
+        
+        context['shared_rides'] = get_shared_rides(self.request.user).filter(
+            arrival_time__gte=today_start).filter(
+                is_complete=False).order_by('arrival_time')
         return context
 
 

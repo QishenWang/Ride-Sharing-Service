@@ -37,26 +37,7 @@ class Ride(models.Model):
                                     on_delete=models.SET_NULL,
                                     null=True,
                                     blank=True)
-    ride_sharer1 = models.ForeignKey(User,
-                                     related_name='Sharer_1',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     blank=True)
-    ride_sharer2 = models.ForeignKey(User,
-                                     related_name='Sharer_2',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     blank=True)
-    ride_sharer3 = models.ForeignKey(User,
-                                     related_name='Sharer_3',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     blank=True)
-    ride_sharer4 = models.ForeignKey(User,
-                                     related_name='Sharer_4',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     blank=True)
+
     ride_destination = models.CharField(max_length=200)
     is_complete = models.BooleanField(default=False)
     is_sharable = models.BooleanField(default=False)
@@ -78,3 +59,8 @@ class Ride(models.Model):
     def clean(self):
         if self.arrival_time.timestamp() <= datetime.now().timestamp():
             raise ValidationError('Arrival time is earlier than current time.')
+
+class ShareRecord(models.Model):
+    user = models.ForeignKey(User, related_name='Sharer', on_delete=models.CASCADE)
+    passenger_number = models.IntegerField(default=1)
+    ride = models.ForeignKey(Ride, related_name='Ride', on_delete=models.CASCADE)
