@@ -29,7 +29,14 @@
         {% endif %}
       </div>
       <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
-      <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+      <div><small class="article-content">Owner Passenger Number: {{ ride.passenger_number }}</small></div>
+      <div><small class="article-content">Total Passenger Number: {{ ride.total_passenger_number }}</small></div>
+      {% if ride.special_request %}
+      <div><small class="article-content">Special Request: {{ ride.special_request }}</small></div>
+      {% else %}
+      <div><small class="article-content">Special Request: None</small></div>
+      {% endif %}
+
       {% if ride.is_sharable %}
       <div><small class="article-content"> Sharable Ride</small></div>
       {% else %}
