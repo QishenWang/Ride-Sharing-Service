@@ -15,7 +15,7 @@ from datetime import datetime, timedelta, time
 from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
                                   DeleteView)
 from django.core.mail import send_mail
-from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
 
 def get_shared_rides(user):

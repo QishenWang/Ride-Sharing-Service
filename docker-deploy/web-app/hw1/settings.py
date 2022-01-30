@@ -25,8 +25,15 @@ SECRET_KEY = 'django-insecure-l3qlo!)z#9-s3l6fi^(^_igcf9d%%@i8z_!cp4w@e4-*%%vi#3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'vcm-24308.vm.duke.edu', '127.0.0.1', 'vcm-24357.vm.duke.edu', 'web'
+# ALLOWED_HOSTS = [
+#     'web', '127.0.0.1', 'vcm-24308.vm.duke.edu', 'vcm-24357.vm.duke.edu'
+# ]
+
+ALLOWED_HOSTS = ['web']
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000", "https://127.0.0.1", "http://localhost:8000",
+    "https://localhost:8000"
 ]
 
 # Application definition
@@ -77,17 +84,22 @@ WSGI_APPLICATION = 'hw1.wsgi.application'
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ridesdb',
+#         'USER': 'dog',
+#         'PASSWORD': 'dog',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
 #     }
 # }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ridesdb',
-        'USER': 'dog',
-        'PASSWORD': 'dog',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -147,4 +159,3 @@ EMAIL_HOST_USER = 'BestAmazingRides@outlook.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_PASSWORD = 'YutongQishen'
 EMAIL_PORT = 587
-
