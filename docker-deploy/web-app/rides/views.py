@@ -435,12 +435,16 @@ class ShareDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         share_record = self.get_object()
         if self.request.user == share_record.user:
-            # 从ride里面把total number 变小
-            Ride.objects.get(
-                id=share_record.ride.id
-            ).total_passenger_number -= share_record.passenger_number
             return True
         return False
+
+    def form_valid(self, form):
+        # 从ride里面把total number 变小
+        share_record = self.get_object()
+        ride = Ride.objects.get(id=share_record.ride.id)
+        ride.total_passenger_number = ride.total_passenger_number - share_record.passenger_number
+        ride.save()
+        return super().form_valid(form)
 
 
 @login_required

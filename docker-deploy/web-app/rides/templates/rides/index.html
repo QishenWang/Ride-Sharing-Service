@@ -6,7 +6,7 @@
 <h3>Ride as Owner</h3>
 {% if not my_rides %}
 <div><small class="article-content"> You have no ride to take. </small>
-  <small><a class="article-content" href=" 'rides:newride' %}">Request a ride now!</a></small>
+  <small><a class="article-content" href="{% url 'rides:newride' %}">Request a ride now!</a></small>
 </div>
 {% endif %}
 

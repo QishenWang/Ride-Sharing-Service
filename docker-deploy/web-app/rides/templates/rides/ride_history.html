@@ -21,6 +21,11 @@
         <small class="article-content">Driver: {{ ride.ride_driver.username }}</small>
         <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
         <div><small class="article-content">Passenger Number: {{ ride.passenger_number }}</small></div>
+        {% if ride.special_request %}
+        <div><small class="article-content">Special Request: {{ ride.special_request }}</small></div>
+        {% else %}
+        <div><small class="article-content">Special Request: None</small></div>
+        {% endif %}
         {% if ride.is_sharable %}
         <div><small class="article-content"> Sharable Ride</small></div>
         {% else %}
@@ -42,8 +47,9 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <h3 class="Ride-Title text-muted">Arrived {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{
-                ride.ride_destination }} </h3>
+            <h3 class="Ride-Title text-muted">
+                Arrived {{ ride.arrival_time|date:"F d, Y H:i" }} @ {{ride.ride_destination }}
+            </h3>
         </div>
         <small class="article-content">Driver: {{ ride.ride_driver.username }}</small>
         <div><small class="article-content">Vehicle Type: {{ ride.vehicle_type }}</small></div>
